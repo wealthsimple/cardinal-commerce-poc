@@ -15,7 +15,7 @@ Then run `cp .env-sample .env` and fill in the `.env` file with Cardinal API cre
 1. start mock API server
 
 ```
-bundle exec ruby app.rb
+bundle exec rerun 'ruby app.rb'
 ```
 
 2. open up the frontend at http://localhost:4567
