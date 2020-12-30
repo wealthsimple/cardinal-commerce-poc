@@ -1,0 +1,57 @@
+<!--
+  Songbird Docs: https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/557065/Songbird.js
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cardinal 3DS Songbird Demo</title>
+    <meta charset="utf-8">
+    <!-- <script src="https://songbirdstag.cardinalcommerce.com/cardinalcruise/v1/songbird.js"></script> -->
+    <script src="https://songbirdstag.cardinalcommerce.com/edge/v1/songbird.js"></script>
+  </head>
+  <body>
+    <h1>Cardinal 3DS Songbird Demo</h1>
+    <div id="Cardinal-Payments"></div>
+
+    <script>
+      Cardinal.on('payments.setupComplete', function(setupCompleteData) {
+        console.log('Cardinal payments.setupComplete', { setupCompleteData });
+        // Do something
+      });
+
+      Cardinal.on('payments.validated', function(decodedResponseData, responseJWT){
+        console.log('Cardinal payments.payments.validated', { decodedResponseData, responseJWT });
+          // Do something
+      });
+
+
+      Cardinal.configure({
+        logging: {
+          level: "verbose", // or "on", "off"
+        },
+        timeout: 6000,
+        extendedtimeout: 4000,
+        maxRequestRetries: 2,
+        button:{
+          containerId: 'Cardinal-Payments'
+        },
+        payment:{
+          view: 'modal',
+          framework: 'cardinal',
+          displayLoading: true,
+          displayExitButton: true
+        }
+      });
+
+      Cardinal.setup('init', {
+        "jwt": "<%= locals[:authentication_jwt] %>"
+      });
+
+      // Cardinal.start('cca', {
+      //   "OrderDetails":{
+      //     "OrderDescription":"An updated description"
+      //   }
+      // });
+    </script>
+  </body>
+</html>
