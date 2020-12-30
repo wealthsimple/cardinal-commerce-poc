@@ -22,9 +22,25 @@
 
       Cardinal.on('payments.validated', function(decodedResponseData, responseJWT){
         console.log('Cardinal payments.payments.validated', { decodedResponseData, responseJWT });
-          // Do something
-      });
 
+        switch (decodedResponseData.ActionCode) {
+          case "SUCCESS":
+          // Handle successful transaction, send JWT to backend to verify
+          break;
+
+          case "NOACTION":
+          // Handle no actionable outcome
+          break;
+
+          case "FAILURE":
+          // Handle failed transaction attempt
+          break;
+
+          case "ERROR":
+          // Handle service level error
+          break;
+        }
+      });
 
       Cardinal.configure({
         logging: {
@@ -45,7 +61,7 @@
       });
 
       Cardinal.setup('init', {
-        "jwt": "<%= locals[:authentication_jwt] %>"
+        "jwt": "<%= locals[:cardinal_jwt] %>",
       });
 
       // Cardinal.start('cca', {
