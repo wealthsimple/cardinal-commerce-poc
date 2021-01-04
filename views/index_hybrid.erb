@@ -17,7 +17,26 @@
     <script>
       Cardinal.on('payments.setupComplete', function(setupCompleteData) {
         console.log('Cardinal payments.setupComplete', { setupCompleteData });
-        // Do something
+
+        console.log('Processing BIN...')
+        Cardinal.trigger("bin.process", '<%= locals[:card_number].first(6) %>')
+          .then(function(results){
+            console.log('bin.process results:', results);
+            if(results.Status) {
+                // Bin profiling was successful. Some merchants may want to only move forward with CCA if profiling was successful
+                console.log('bin.process succeeded!');
+            } else {
+                // Bin profiling failed
+                console.log('bin.process failed!');
+            }
+
+            // Bin profiling, if this is the card the end user is paying with you may start the CCA flow at this point
+            // Cardinal.start('cca', myOrderObject);
+          })
+          .catch(function(error){
+            // An error occurred during profiling
+            console.log('bin.process error:', error);
+          });
       });
 
       Cardinal.on('payments.validated', function(decodedResponseData, responseJWT){
