@@ -12,10 +12,7 @@ Then run `cp .env-sample .env` and fill in the `.env` file with Cardinal API cre
 
 ### Usage
 
-1. start mock API server
-
-```
-bundle exec rerun 'ruby app.rb'
-```
-
+1. start mock API server with `./server.sh`
 2. open up the frontend at http://localhost:4567
+
+You can also run a local console with `./console.sh`

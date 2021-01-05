@@ -5,6 +5,10 @@ gem 'activesupport'
 gem 'dotenv'
 gem 'faraday'
 gem 'jwt'
-gem 'rerun'
 gem 'sinatra'
-gem 'terminal-notifier'
+
+group :development do
+  gem 'pry'
+  gem 'rerun'
+  gem 'terminal-notifier'
+end

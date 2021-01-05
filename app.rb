@@ -1,11 +1,6 @@
-require 'active_support/all'
-require 'dotenv/load'
-require 'json'
-require 'jwt'
-require 'securerandom'
+require './environment'
 require 'sinatra'
 
-require './utils/cardinal_jwt_helper'
 
 # Test card numbers for Cardinal from:
 # https://cardinaldocs.atlassian.net/wiki/spaces/CCen/pages/903577725/EMV+3DS+Test+Cases
