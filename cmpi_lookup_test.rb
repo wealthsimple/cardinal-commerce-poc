@@ -1,5 +1,7 @@
 require './environment'
 
+# Via Cardinal contact (Jason Chow), add a small buffer to timestamp or else
+# this cmpi_lookup request sporadically fails:
 timestamp_buffer = 10000
 timestamp = (Time.now.to_f * 1000).to_i - timestamp_buffer
 api_key = ENV.fetch('API_KEY')
@@ -9,13 +11,13 @@ request_signature = Base64.strict_encode64(
   Digest::SHA256.digest("#{timestamp}#{api_key}")
 ).strip
 
-# Card details:
+# Card details to be extracted by TabaPay, given an AccountID:
 card_number = "4000000000001091"
 card_expiry_month = "02"
 card_expiry_year = "2024"
 card_currency_code = "840"
 
-# Details to be passed in via REST API endpoint:
+# Details to be passed in from Wealthsimple via new TabaPay REST API endpoint:
 df_reference_id = "c17dea31-9cf6-0c1b8f2d3c5"
 transaction_id = "ws_transaction-0001"
 transaction_amount = "12345"
