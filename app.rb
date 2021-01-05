@@ -54,6 +54,7 @@ post '/accounts/:account_id/proxy_cmpi_lookup' do |account_id|
     df_reference_id: request_params[:df_reference_id],
   )
   cardinal_response_xml = cmpi_lookup.perform_request
+  puts "CMPI Lookup Response:", cardinal_response_xml
 
   content_type :json
   JSON.dump(Hash.from_xml(cardinal_response_xml).as_json)
