@@ -1,5 +1,7 @@
+# This script is used to perform the Cardinal cmpi_lookup request.
+# https://cardinaldocs.atlassian.net/wiki/spaces/CCen/pages/1619492942/Cardinal+cmpi+Messages
+#
 # Usage: bundle exec ruby scripts/cmpi_lookup_test.rb
-# See https://github.com/jaechow/cardinal/blob/master/centinel/lookup/cmpi00.php for PHP example
 require './environment'
 
 # Cardinal Sandbox credentials:
@@ -16,7 +18,8 @@ request_signature = Base64.strict_encode64(
 ).strip
 
 # Wealthsimple will provide TabaPay an AccountId, from which TabaPay can extract
-# the below card details:
+# the below card details.
+# Sandbox card PANs can be found at https://cardinaldocs.atlassian.net/wiki/spaces/CCen/pages/903577725/EMV+3DS+Test+Cases
 card_number = "4000000000001091"
 card_expiry_month = "02"
 card_expiry_year = "2024"

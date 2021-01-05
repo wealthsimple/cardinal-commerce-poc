@@ -2,13 +2,16 @@ class CardinalJwtHelper
   # https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/196850/JWT+Creation
   # The JWT is a JWS with the signature using a SHA-256 HMAC hash algorithm. The JWT must be created server-side and sent to the front end to be injected into the JavaScript initialization code. Creating a JWT client-side is not a valid activation option. Each order should have a uniquely generated JWT associated with it.
 
-  def initialize(ws_reference_id:, callback_url:)
-    @ws_reference_id = ws_reference_id
+  def initialize(callback_url:)
     @callback_url = callback_url
   end
 
   def order_number
     @order_number ||= "wsorder_#{SecureRandom.uuid}"
+  end
+
+  def order_amount
+    12345
   end
 
   def authentication_jwt
@@ -20,7 +23,7 @@ class CardinalJwtHelper
       Payload: {
         OrderDetails: {
           OrderNumber: order_number,
-          Amount: 12345,
+          Amount: order_amount,
           CurrencyCode: '840',
         },
       },

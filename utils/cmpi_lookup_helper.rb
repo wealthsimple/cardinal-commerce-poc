@@ -1,4 +1,3 @@
-# See https://github.com/jaechow/cardinal/blob/master/centinel/lookup/cmpi00.php for full working example
 class CmpiLookupHelper
   def initialize(
     card_number:,
@@ -14,52 +13,34 @@ class CmpiLookupHelper
     @df_reference_id = df_reference_id
     # unix epoch time in milliseconds
     # example: 1467122891960
-    @timestamp = (Time.now.to_f * 1000).to_i
+    # Via Cardinal contact (Jason Chow), add a small buffer to timestamp or else
+    # this cmpi_lookup request sporadically fails:
+    timestamp_buffer = 10000
+    @timestamp = (Time.now.to_f * 1000).to_i - timestamp_buffer
   end
 
   def perform_request
-    connection = Faraday.new(
-      "https://centineltest.cardinalcommerce.com",
-      {
-        ssl: { verify: false },
-      },
-    )
-    response = connection.post(
-      "/maps/txns.asp",
-      "cmpi_msg=\n#{xml_body}\n"
-    )
-    if response.status != 200 || response.body.include?("ErrorDesc")
-      p "error response:", response.status, response.body&.strip
-    else
-      p "success response", response.status, response.body&.strip
-    end
-    response
-  rescue Faraday::Error => e
-    p "perform_request error:", e
+    ch = Curl::Easy.new(ENV.fetch('TRANSACTION_URL'))
+    ch.verbose = true
+    ch.timeout = 10
+    ch.ssl_verify_host = false
+    ch.http_post(Curl::PostField.file('cmpi_msg', request_body))
+    ch.body_str.strip
   end
 
-  def signature
-    generate_signature(@timestamp, ENV.fetch('API_KEY'), 'sha256')
+  def request_signature
+    api_key = ENV.fetch('API_KEY')
+    Base64.strict_encode64(
+      Digest::SHA256.digest("#{@timestamp}#{api_key}")
+    ).strip
   end
 
-  def generate_signature(timestamp, api_key, algo = 'sha256')
-    # Base64(Sha256(Timestamp + ApiKey))
-    signature_body = "#{timestamp}#{api_key}"
-    p "Generating signature from #{signature_body}"
-    digest = if algo == "sha512"
-      Digest::SHA512.digest(signature_body)
-    else
-      Digest::SHA256.digest(signature_body)
-    end
-    Base64.strict_encode64(digest).strip
-  end
-
-  def xml_body
+  def request_body
     # TODO: other fields like address etc should be customizable
     # https://cardinaldocs.atlassian.net/wiki/spaces/CCen/pages/905478187/Lookup+Request+cmpi+lookup
     %{
 <CardinalMPI>
-    <Algorithm>SHA-512</Algorithm>
+    <Algorithm>SHA-256</Algorithm>
     <Amount>12345</Amount>
     <BillAddrPostCode>44060</BillAddrPostCode>
     <BillAddrState>OH</BillAddrState>
@@ -79,12 +60,12 @@ class CmpiLookupHelper
     <CurrencyCode>840</CurrencyCode>
     <DFReferenceId>#{@df_reference_id}</DFReferenceId>
     <DeviceChannel>browser</DeviceChannel>
-    <Email>cardinal.mobile.test@gmail.com</Email>
+    <Email>cardinal.mobile.test@example.com</Email>
     <Identifier>#{ENV.fetch('API_IDENTIFIER')}</Identifier>
     <MsgType>cmpi_lookup</MsgType>
     <OrderNumber>#{@order_number}</OrderNumber>
     <OrgUnit>#{ENV.fetch('ORG_UNIT_ID')}</OrgUnit>
-    <Signature>#{signature}</Signature>
+    <Signature>#{request_signature}</Signature>
     <Timestamp>#{@timestamp}</Timestamp>
     <TransactionType>C</TransactionType>
     <UserAgent>Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0</UserAgent>
