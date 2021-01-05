@@ -84,12 +84,6 @@ class CmpiLookupHelper
     <MsgType>cmpi_lookup</MsgType>
     <OrderNumber>#{@order_number}</OrderNumber>
     <OrgUnit>#{ENV.fetch('ORG_UNIT_ID')}</OrgUnit>
-    <ShippingAddress1>8100 Tyler Blvd</ShippingAddress1>
-    <ShippingAddress2></ShippingAddress2>
-    <ShippingCity>44060</ShippingCity>
-    <ShippingCountryCode>840</ShippingCountryCode>
-    <ShippingPostalCode>44060</ShippingPostalCode>
-    <ShippingState>OH</ShippingState>
     <Signature>#{signature}</Signature>
     <Timestamp>#{@timestamp}</Timestamp>
     <TransactionType>C</TransactionType>

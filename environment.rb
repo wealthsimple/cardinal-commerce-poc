@@ -1,5 +1,6 @@
 require 'active_support/all'
 require 'base64'
+require 'curb'
 require 'digest'
 require 'dotenv/load'
 require 'faraday'
