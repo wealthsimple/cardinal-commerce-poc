@@ -16,24 +16,35 @@ card_expiry_year = "2024"
 card_currency_code = "840"
 
 # Details to be passed in via REST API endpoint:
-order_number = "order-0001"
-order_amount = "12345"
+transaction_id = "ws_transaction-0001"
+transaction_amount = "12345"
+billing_address = {
+  street1: "4 Jersey St",
+  street2: "",
+  city: "Boston",
+  postal_code: "02215",
+  state: "MA",
+  country_code: "840",
+}
+billing_name = {
+  first: "Pedro",
+  last: "Martinez",
+  middle: "",
+}
 
 cmpi_lookup = <<-XML
 <CardinalMPI>
     <Algorithm>SHA-256</Algorithm>
-    <Amount>#{order_amount}</Amount>
-    <BillAddrPostCode>44060</BillAddrPostCode>
-    <BillAddrState>OH</BillAddrState>
-    <BillingAddress1>8100 Tyler Blvd</BillingAddress1>
-    <BillingAddress2></BillingAddress2>
-    <BillingCity>Mentor</BillingCity>
-    <BillingCountryCode>840</BillingCountryCode>
-    <BillingFirstName>John</BillingFirstName>
-    <BillingFullName>John Doe</BillingFullName>
-    <BillingLastName>Doe</BillingLastName>
-    <BillingPostalCode>44060</BillingPostalCode>
-    <BillingState>OH</BillingState>
+    <Amount>#{transaction_amount}</Amount>
+    <BillingAddress1>#{billing_address[:street1]}</BillingAddress1>
+    <BillingAddress2>#{billing_address[:street2]}</BillingAddress2>
+    <BillingCity>#{billing_address[:city]}</BillingCity>
+    <BillingPostalCode>#{billing_address[:postal_code]}</BillingPostalCode>
+    <BillingState>#{billing_address[:state]}</BillingState>
+    <BillingCountryCode>#{billing_address[:country_code]}</BillingCountryCode>
+    <BillingFirstName>#{billing_name[:first]}</BillingFirstName>
+    <BillingMiddleName>#{billing_name[:middle]}</BillingMiddleName>
+    <BillingLastName>#{billing_name[:last]}</BillingLastName>
     <BrowserColorDepth>32</BrowserColorDepth>
     <BrowserHeader>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</BrowserHeader>
     <BrowserJavaEnabled>true</BrowserJavaEnabled>
@@ -51,7 +62,7 @@ cmpi_lookup = <<-XML
     <IPAddress>67.17.219.20</IPAddress>
     <Identifier>#{api_id}</Identifier>
     <MsgType>cmpi_lookup</MsgType>
-    <OrderNumber>#{order_number}</OrderNumber>
+    <OrderNumber>#{transaction_id}</OrderNumber>
     <OrgUnit>#{org_unit}</OrgUnit>
     <Signature>#{request_signature}</Signature>
     <Timestamp>#{timestamp}</Timestamp>
