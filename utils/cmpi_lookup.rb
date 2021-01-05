@@ -1,12 +1,16 @@
 class CmpiLookup
   def initialize(
     card_number:,
+    card_expiry_month:,
+    card_expiry_year:,
     order_number:,
     order_amount:,
     order_currency_code:,
     df_reference_id:
   )
     @card_number = card_number
+    @card_expiry_month = card_expiry_month
+    @card_expiry_year = card_expiry_year
     @order_number = order_number
     @order_amount = order_amount
     @order_currency_code = order_currency_code
@@ -58,8 +62,8 @@ class CmpiLookup
     <BillingPostalCode>44060</BillingPostalCode>
     <BillingState>OH</BillingState>
     <BrowserHeader>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</BrowserHeader>
-    <CardExpMonth>02</CardExpMonth>
-    <CardExpYear>2023</CardExpYear>
+    <CardExpMonth>#{@card_expiry_month}</CardExpMonth>
+    <CardExpYear>#{@card_expiry_year}</CardExpYear>
     <CardNumber>#{@card_number}</CardNumber>
     <CurrencyCode>#{@order_currency_code}</CurrencyCode>
     <DFReferenceId>#{@df_reference_id}</DFReferenceId>

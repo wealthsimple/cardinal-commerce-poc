@@ -25,18 +25,35 @@
       // Values that Wealthsimple will generate or have access to:
       const orderNumber = "<%= locals[:order_number] %>";
       const orderAmount = "<%= locals[:order_amount] %>";
+      const orderCurrencyCode = "<%= locals[:order_currency_code] %>";
       const cardBin = "<%= locals[:card_bin] %>";
       const cardinalJwt = "<%= locals[:cardinal_jwt] %>";
 
       Cardinal.on('payments.setupComplete', function(setupCompleteData) {
         console.log('Cardinal payments.setupComplete', { setupCompleteData });
 
-        const dfReferenceId = setupCompleteData.sessionId
+        const dfReferenceId = setupCompleteData.sessionId;
         document.querySelector('#df-reference-id').innerText = dfReferenceId;
 
         document.querySelector('#submit-order-button').addEventListener('click', function() {
           console.log('Submitting transaction...');
-
+          fetch('/accounts/TabaPayAccount123/proxy_cmpi_lookup', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              df_reference_id: dfReferenceId,
+              order_number: orderNumber,
+              // In actual implementation, these would be sent by our backend to TabaPay:
+              order_amount: orderAmount,
+              order_currency_code: orderCurrencyCode,
+            })
+          })
+            .then(res => res.json())
+            .then(data => console.log('Submit transaction response:', data))
+            .catch(e => console.log('Submit transaction error:', e));
         });
 
         console.log('Processing BIN...')

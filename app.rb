@@ -40,14 +40,21 @@ post '/accounts/:account_id/proxy_cmpi_lookup' do |account_id|
   card_number = CARD_NUMBERS.fetch(:VISA_CHALLENGE)
   card_expiry_month = "02"
   card_expiry_year = "2024"
-  card_currency_code = "840"
 
   # Params that Wealthsimple will provide in request body:
-  request_body = JSON.parse(request.body.read).symbolize_keys
+  request_params = JSON.parse(request.body.read).symbolize_keys
 
-  cardinal_response_xml = CmpiLookup.new()
-  cardinal_response_as_json = Hash.from_xml(cardinal_response_xml).as_json
+  cmpi_lookup = CmpiLookup.new(
+    card_number: card_number,
+    card_expiry_month: card_expiry_month,
+    card_expiry_year: card_expiry_year,
+    order_number: request_params[:order_number],
+    order_amount: request_params[:order_amount],
+    order_currency_code: request_params[:order_currency_code],
+    df_reference_id: request_params[:df_reference_id],
+  )
+  cardinal_response_xml = cmpi_lookup.perform_request
 
   content_type :json
-  JSON.dump(cardinal_response_as_json)
+  JSON.dump(Hash.from_xml(cardinal_response_xml).as_json)
 end
