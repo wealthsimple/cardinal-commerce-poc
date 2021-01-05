@@ -20,7 +20,7 @@ class CardinalJwtHelper
       Payload: {
         OrderDetails: {
           OrderNumber: order_number,
-          Amount: 1500,
+          Amount: 12345,
           CurrencyCode: '840',
         },
       },

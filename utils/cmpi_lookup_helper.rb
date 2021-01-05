@@ -39,7 +39,7 @@ class CmpiLookupHelper
   end
 
   def signature
-    generate_signature(@timestamp, ENV.fetch('API_KEY'), 'sha512')
+    generate_signature(@timestamp, ENV.fetch('API_KEY'), 'sha256')
   end
 
   def generate_signature(timestamp, api_key, algo = 'sha256')
