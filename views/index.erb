@@ -16,6 +16,8 @@
     <h4>Order Number <pre><%= locals[:order_number] %></pre></h4>
     <h4>Order Amount <pre>$<%= (locals[:order_amount].to_d / 100).round(2) %> (Currency Code: <%= locals[:order_currency_code] %>)</pre></h4>
     <h4>DfReferenceId <pre id='df-reference-id'>loading...</pre></h4>
+    <h4>3DS Result</h4>
+    <pre id="threeds-result">Awaiting results...</pre>
 
     <button id="submit-order-button">Submit Transaction</button>
 
@@ -59,11 +61,14 @@
                   AcsUrl: data.CardinalMPI.ACSUrl,
                   Payload: data.CardinalMPI.Payload
                 },
+                // https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/32950/Request+Objects#RequestObjects-OrderObject
                 {
                   OrderDetails: {
                     OrderNumber: orderNumber,
                     Amount: orderAmount,
                     CurrencyCode: orderCurrencyCode,
+                    OrderChannel: 'S',
+                    TransactionId: data.CardinalMPI.TransactionId,
                   },
                 },
               );
@@ -98,6 +103,7 @@
         switch (decodedResponseData.ActionCode) {
           case "SUCCESS":
           // Handle successful transaction, send JWT to backend to verify
+          document.querySelector('#threeds-result').innerText = JSON.stringify(decodedResponseData, null, 2);
           break;
 
           case "NOACTION":
