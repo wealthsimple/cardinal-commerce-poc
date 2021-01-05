@@ -21,6 +21,7 @@ get '/' do
   erb :index_hybrid, locals: {
     cardinal_jwt: cardinal_jwt_helper.transactional_jwt,
     card_number: CARD_NUMBERS.fetch(:VISA_SUCCESS),
+    order_number: cardinal_jwt_helper.order_number,
   }
 end
 

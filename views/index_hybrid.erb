@@ -12,11 +12,16 @@
   <body>
     <h1>Cardinal 3DS Songbird Demo</h1>
     <pre>Open up JS console to view verbose logs.</pre>
+    <h4>Card Number <pre><%= locals[:card_number] %></pre></h4>
+    <h4>Order Number <pre><%= locals[:order_number] %></pre></h4>
+    <h4>DfReferenceId <pre id="df_reference_id">loading...</pre></h4>
     <div id="Cardinal-Payments"></div>
 
     <script>
       Cardinal.on('payments.setupComplete', function(setupCompleteData) {
         console.log('Cardinal payments.setupComplete', { setupCompleteData });
+
+        document.querySelector('#df_reference_id').innerText = setupCompleteData.sessionId;
 
         console.log('Processing BIN...')
         Cardinal.trigger("bin.process", '<%= locals[:card_number].first(6) %>')

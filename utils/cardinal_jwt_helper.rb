@@ -7,6 +7,10 @@ class CardinalJwtHelper
     @callback_url = callback_url
   end
 
+  def order_number
+    @order_number ||= "wsorder_#{SecureRandom.uuid}"
+  end
+
   def authentication_jwt
     encode_jwt(generate_jwt_payload)
   end
@@ -15,7 +19,7 @@ class CardinalJwtHelper
     encode_jwt(generate_jwt_payload(
       Payload: {
         OrderDetails: {
-          OrderNumber: SecureRandom.uuid,
+          OrderNumber: order_number,
           Amount: 1500,
           CurrencyCode: '840',
         },
@@ -54,7 +58,7 @@ class CardinalJwtHelper
       # The merchant SSO OrgUnitId
       OrgUnitId: ENV.fetch('ORG_UNIT_ID'),
       # This is a merchant supplied identifier that can be used to match up data collected from Cardinal Cruise and Centinel. Centinel can then use data collected to enable rules or enhance the authentication request.
-      ReferenceId: @ws_reference_id,
+      # ReferenceId: @ws_reference_id,
     }.merge(additional_opts)
   end
 
