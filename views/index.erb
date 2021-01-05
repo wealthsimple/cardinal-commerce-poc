@@ -12,20 +12,35 @@
   <body>
     <h1>Cardinal 3DS Songbird Demo</h1>
     <pre>Open up JS console to view verbose logs.</pre>
-    <h4>JWT <textarea><%= locals[:cardinal_jwt] %></textarea></h4>
+    <h4>Cardinal Transactional JWT <textarea><%= locals[:cardinal_jwt] %></textarea></h4>
     <h4>Order Number <pre><%= locals[:order_number] %></pre></h4>
-    <h4>DfReferenceId <pre id='df_reference_id'>loading...</pre></h4>
+    <h4>Order Amount <pre>$<%= locals[:order_amount] %> (Currency Code: <%= locals[:order_currency_code] %>)</pre></h4>
+    <h4>DfReferenceId <pre id='df-reference-id'>loading...</pre></h4>
+
+    <button id="submit-order-button">Submit Transaction</button>
 
     <div id="Cardinal-Payments"></div>
 
     <script>
+      // Values that Wealthsimple will generate or have access to:
+      const orderNumber = "<%= locals[:order_number] %>";
+      const orderAmount = "<%= locals[:order_amount] %>";
+      const cardBin = "<%= locals[:card_bin] %>";
+      const cardinalJwt = "<%= locals[:cardinal_jwt] %>";
+
       Cardinal.on('payments.setupComplete', function(setupCompleteData) {
         console.log('Cardinal payments.setupComplete', { setupCompleteData });
 
-        document.querySelector('#df_reference_id').innerText = setupCompleteData.sessionId;
+        const dfReferenceId = setupCompleteData.sessionId
+        document.querySelector('#df-reference-id').innerText = dfReferenceId;
+
+        document.querySelector('#submit-order-button').addEventListener('click', function() {
+          console.log('Submitting transaction...');
+
+        });
 
         console.log('Processing BIN...')
-        Cardinal.trigger("bin.process", '<%= locals[:card_bin] %>')
+        Cardinal.trigger("bin.process", cardBin)
           .then(function(results){
             console.log('bin.process results:', results);
             if(results.Status) {
@@ -86,14 +101,8 @@
       });
 
       Cardinal.setup('init', {
-        "jwt": "<%= locals[:cardinal_jwt] %>",
+        'jwt': cardinalJwt,
       });
-
-      // Cardinal.start('cca', {
-      //   "OrderDetails":{
-      //     "OrderDescription":"An updated description"
-      //   }
-      // });
     </script>
   </body>
 </html>

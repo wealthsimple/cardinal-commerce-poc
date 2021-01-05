@@ -8,5 +8,5 @@ require 'jwt'
 require 'securerandom'
 require 'uri'
 
-require './utils/cardinal_jwt_helper'
-require './utils/cmpi_lookup_helper'
+require './utils/cardinal_jwt'
+require './utils/cmpi_lookup'

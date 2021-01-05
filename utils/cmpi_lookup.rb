@@ -1,11 +1,15 @@
-class CmpiLookupHelper
+class CmpiLookup
   def initialize(
     card_number:,
     order_number:,
+    order_amount:,
+    order_currency_code:,
     df_reference_id:
   )
     @card_number = card_number
     @order_number = order_number
+    @order_amount = order_amount
+    @order_currency_code = order_currency_code
     # Iff `ReferenceId` is in initial JWT, then this must match the
     # DfReferenceId here. Otherwise, DfReferenceId should be what is
     # passed back from setupCompleteData on frontend.
@@ -41,7 +45,7 @@ class CmpiLookupHelper
     %{
 <CardinalMPI>
     <Algorithm>SHA-256</Algorithm>
-    <Amount>12345</Amount>
+    <Amount>#{@order_amount}</Amount>
     <BillAddrPostCode>44060</BillAddrPostCode>
     <BillAddrState>OH</BillAddrState>
     <BillingAddress1>8100 Tyler Blvd</BillingAddress1>
@@ -57,7 +61,7 @@ class CmpiLookupHelper
     <CardExpMonth>02</CardExpMonth>
     <CardExpYear>2023</CardExpYear>
     <CardNumber>#{@card_number}</CardNumber>
-    <CurrencyCode>840</CurrencyCode>
+    <CurrencyCode>#{@order_currency_code}</CurrencyCode>
     <DFReferenceId>#{@df_reference_id}</DFReferenceId>
     <DeviceChannel>browser</DeviceChannel>
     <Email>cardinal.mobile.test@example.com</Email>
