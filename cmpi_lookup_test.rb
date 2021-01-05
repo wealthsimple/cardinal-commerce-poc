@@ -16,6 +16,7 @@ card_expiry_year = "2024"
 card_currency_code = "840"
 
 # Details to be passed in via REST API endpoint:
+df_reference_id = "c17dea31-9cf6-0c1b8f2d3c5"
 transaction_id = "ws_transaction-0001"
 transaction_amount = "12345"
 billing_address = {
@@ -26,10 +27,11 @@ billing_address = {
   state: "MA",
   country_code: "840",
 }
-billing_name = {
+billing_person = {
   first: "Pedro",
   last: "Martinez",
   middle: "",
+  email: "cardinal.mobile.test@example.com",
 }
 
 cmpi_lookup = <<-XML
@@ -42,9 +44,9 @@ cmpi_lookup = <<-XML
     <BillingPostalCode>#{billing_address[:postal_code]}</BillingPostalCode>
     <BillingState>#{billing_address[:state]}</BillingState>
     <BillingCountryCode>#{billing_address[:country_code]}</BillingCountryCode>
-    <BillingFirstName>#{billing_name[:first]}</BillingFirstName>
-    <BillingMiddleName>#{billing_name[:middle]}</BillingMiddleName>
-    <BillingLastName>#{billing_name[:last]}</BillingLastName>
+    <BillingFirstName>#{billing_person[:first]}</BillingFirstName>
+    <BillingMiddleName>#{billing_person[:middle]}</BillingMiddleName>
+    <BillingLastName>#{billing_person[:last]}</BillingLastName>
     <BrowserColorDepth>32</BrowserColorDepth>
     <BrowserHeader>text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</BrowserHeader>
     <BrowserJavaEnabled>true</BrowserJavaEnabled>
@@ -56,9 +58,9 @@ cmpi_lookup = <<-XML
     <CardExpYear>#{card_expiry_year}</CardExpYear>
     <CardNumber>#{card_number}</CardNumber>
     <CurrencyCode>#{card_currency_code}</CurrencyCode>
-    <DFReferenceId>c17dea31-9cf6-0c1b8f2d3c5</DFReferenceId>
+    <DFReferenceId>#{df_reference_id}</DFReferenceId>
     <DeviceChannel>browser</DeviceChannel>
-    <Email>cardinal.mobile.test@example.com</Email>
+    <Email>#{billing_person[:email]}</Email>
     <IPAddress>67.17.219.20</IPAddress>
     <Identifier>#{api_id}</Identifier>
     <MsgType>cmpi_lookup</MsgType>
