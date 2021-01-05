@@ -5,7 +5,7 @@ require './environment'
 
 # Cardinal Sandbox credentials:
 api_key = ENV.fetch('API_KEY')
-api_id = ENV.fetch('API_IDENTIFIER')
+api_identifier = ENV.fetch('API_IDENTIFIER')
 org_unit = ENV.fetch('ORG_UNIT_ID')
 
 # Generate the request signature as documented under:
@@ -20,13 +20,13 @@ request_signature = Base64.strict_encode64(Digest::SHA256.digest("#{timestamp}#{
 card_number = "4000000000001091"
 card_expiry_month = "02"
 card_expiry_year = "2024"
-card_currency_code = "840"
 
 # Additional details that Wealthsimple will provide to new TabaPay API endpoint:
 df_reference_id = "c17dea31-9cf6-0c1b8f2d3c5"
-transaction_id = "ws_transaction-0001"
-transaction_amount = "12345"
-transaction_type = "C"
+order_number = "ws_transaction-0001"
+order_amount = "12345" # Amount is in cents
+order_currency_code = "840" # 3-digit ISO country code
+order_transaction_type = "C" # C = credit/debit
 billing_address = {
   street1: "4 Jersey St",
   street2: "Unit 123",
@@ -56,7 +56,7 @@ browser_details = {
 cmpi_lookup = <<-XML
 <CardinalMPI>
     <Algorithm>SHA-256</Algorithm>
-    <Amount>#{transaction_amount}</Amount>
+    <Amount>#{order_amount}</Amount>
     <BillingAddress1>#{billing_address[:street1]}</BillingAddress1>
     <BillingAddress2>#{billing_address[:street2]}</BillingAddress2>
     <BillingCity>#{billing_address[:city]}</BillingCity>
@@ -76,18 +76,18 @@ cmpi_lookup = <<-XML
     <CardExpMonth>#{card_expiry_month}</CardExpMonth>
     <CardExpYear>#{card_expiry_year}</CardExpYear>
     <CardNumber>#{card_number}</CardNumber>
-    <CurrencyCode>#{card_currency_code}</CurrencyCode>
+    <CurrencyCode>#{order_currency_code}</CurrencyCode>
     <DFReferenceId>#{df_reference_id}</DFReferenceId>
     <DeviceChannel>browser</DeviceChannel>
     <Email>#{billing_person[:email]}</Email>
     <IPAddress>#{browser_details[:ip_address]}</IPAddress>
-    <Identifier>#{api_id}</Identifier>
+    <Identifier>#{api_identifier}</Identifier>
     <MsgType>cmpi_lookup</MsgType>
-    <OrderNumber>#{transaction_id}</OrderNumber>
+    <OrderNumber>#{order_number}</OrderNumber>
     <OrgUnit>#{org_unit}</OrgUnit>
     <Signature>#{request_signature}</Signature>
     <Timestamp>#{timestamp}</Timestamp>
-    <TransactionType>#{transaction_type}</TransactionType>
+    <TransactionType>#{order_transaction_type}</TransactionType>
     <UserAgent>#{browser_details[:user_agent]}</UserAgent>
     <Version>1.7</Version>
 </CardinalMPI>
