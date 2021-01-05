@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Cardinal 3DS Songbird Demo</title>
+    <title>Cardinal 3DS Hybrid Demo</title>
     <meta charset="utf-8">
     <!-- <script src="https://songbirdstag.cardinalcommerce.com/cardinalcruise/v1/songbird.js"></script> -->
     <script src="https://songbirdstag.cardinalcommerce.com/edge/v1/songbird.js"></script>
@@ -13,9 +13,9 @@
     <h1>Cardinal 3DS Songbird Demo</h1>
     <pre>Open up JS console to view verbose logs.</pre>
     <h4>JWT <textarea><%= locals[:cardinal_jwt] %></textarea></h4>
-    <h4>Card Number <pre><%= locals[:card_number] %></pre></h4>
     <h4>Order Number <pre><%= locals[:order_number] %></pre></h4>
-    <h4><pre>cmpi = CmpiLookupHelper.new(card_number: "<%= locals[:card_number] %>", df_reference_id: "<span id='df_reference_id'>loading...</span>", order_number: "<%= locals[:order_number] %>")</pre></h4>
+    <h4>DfReferenceId <pre id='df_reference_id'>loading...</pre></h4>
+
     <div id="Cardinal-Payments"></div>
 
     <script>
@@ -25,7 +25,7 @@
         document.querySelector('#df_reference_id').innerText = setupCompleteData.sessionId;
 
         console.log('Processing BIN...')
-        Cardinal.trigger("bin.process", '<%= locals[:card_number].first(6) %>')
+        Cardinal.trigger("bin.process", '<%= locals[:card_bin] %>')
           .then(function(results){
             console.log('bin.process results:', results);
             if(results.Status) {
