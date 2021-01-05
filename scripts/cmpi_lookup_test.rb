@@ -1,23 +1,28 @@
+# Usage: bundle exec ruby scripts/cmpi_lookup_test.rb
+# See https://github.com/jaechow/cardinal/blob/master/centinel/lookup/cmpi00.php for PHP example
 require './environment'
 
-# Via Cardinal contact (Jason Chow), add a small buffer to timestamp or else
-# this cmpi_lookup request sporadically fails:
-timestamp_buffer = 10000
-timestamp = (Time.now.to_f * 1000).to_i - timestamp_buffer
+# Cardinal Sandbox credentials:
 api_key = ENV.fetch('API_KEY')
 api_id = ENV.fetch('API_IDENTIFIER')
 org_unit = ENV.fetch('ORG_UNIT_ID')
+
+# Generate the request signature as documented under:
+# https://cardinaldocs.atlassian.net/wiki/spaces/CCen/pages/1619492942/Cardinal+cmpi+Messages#Generating-a-Signature-Value
+timestamp_buffer = 10000
+timestamp = (Time.now.to_f * 1000).to_i - timestamp_buffer
 request_signature = Base64.strict_encode64(
   Digest::SHA256.digest("#{timestamp}#{api_key}")
 ).strip
 
-# Card details to be extracted by TabaPay, given an AccountID:
+# Wealthsimple will provide TabaPay an AccountId, from which TabaPay can extract
+# the below card details:
 card_number = "4000000000001091"
 card_expiry_month = "02"
 card_expiry_year = "2024"
 card_currency_code = "840"
 
-# Details to be passed in from Wealthsimple via new TabaPay REST API endpoint:
+# Additional details that Wealthsimple will provide to new TabaPay API endpoint:
 df_reference_id = "c17dea31-9cf6-0c1b8f2d3c5"
 transaction_id = "ws_transaction-0001"
 transaction_amount = "12345"
@@ -83,4 +88,7 @@ ch.verbose = true
 ch.timeout = 10
 ch.ssl_verify_host = false
 ch.http_post(Curl::PostField.file('cmpi_msg', cmpi_lookup))
-puts ch.body_str
+
+# TabaPay will proxy this XML response as-is back to Wealthsimple:
+response_body = ch.body_str
+puts response_body
