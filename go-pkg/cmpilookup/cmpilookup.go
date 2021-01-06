@@ -6,7 +6,13 @@ import (
 	"encoding/base64"
 	"errors"
 	"io"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"path"
+	"runtime"
 	"strconv"
+	"strings"
 	"text/template"
 	"time"
 )
@@ -33,10 +39,10 @@ func GenerateCmpiRequestSignature(apiKey string, timestamp string) (string, erro
 // Returns the unix epoch timestamp in milliseconds (with small buffer)
 // Jason Chow from Cardinal recommended the small buffer since otherwise the
 // cmpi_lookup request will sporadically fail.
-func GetRequestTimestampWithBuffer() (string) {
+func GetRequestTimestampWithBuffer() string {
 	timestampBuffer := int64(10000)
 	timestampInMilliseconds := time.Now().UnixNano() / int64(time.Millisecond)
-	return strconv.FormatInt(timestampInMilliseconds - timestampBuffer, 10)
+	return strconv.FormatInt(timestampInMilliseconds-timestampBuffer, 10)
 }
 
 // TODO: add all remaining params here:
@@ -53,10 +59,33 @@ type CmpiRequestBodyParams struct {
 }
 
 func GenerateCmpiRequestBodyXml(params CmpiRequestBodyParams) (string, error) {
-	xmlTemplate := template.Must(template.ParseFiles("cmpi_request_body_template.xml"))
+	// Open up the XML template file
+	_, file, _, _ := runtime.Caller(0)
+	relativePath := path.Join(path.Dir(file))
+	xmlTemplate := template.Must(template.ParseFiles(relativePath + "/cmpi_request_body_template.xml"))
 
+	// Interpolate params into template:
 	requestBodyBuffer := bytes.Buffer{}
 	xmlTemplate.Execute(io.Writer(&requestBodyBuffer), params)
 
 	return requestBodyBuffer.String(), nil
+}
+
+func PerformCmpiLookupRequest(cmpiRequestBodyXml string) (string, error) {
+	response, err := http.PostForm(
+		"https://centineltest.cardinalcommerce.com/maps/txns.asp",
+		url.Values{"cmpi_msg": {cmpiRequestBodyXml}},
+	)
+	if err != nil {
+		return "", err
+	}
+
+	defer response.Body.Close()
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return "", err
+	}
+	trimmedBody := strings.TrimRight(string(body), "\t \n")
+
+	return trimmedBody, nil
 }
