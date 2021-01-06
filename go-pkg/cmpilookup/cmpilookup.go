@@ -60,25 +60,25 @@ type CmpiRequestBodyParams struct {
 	CardExpiryYear  string
 
 	// Order details (provided by Wealthsimple)
-	OrderAmount string
-	OrderCurrencyCode string
-	OrderNumber string
+	OrderAmount          string
+	OrderCurrencyCode    string
+	OrderNumber          string
 	OrderTransactionMode string
 	OrderTransactionType string
 
 	// Device details (provided by Wealthsimple)
-	BrowserColorDepth string
-	BrowserHeader string
-	BrowserJavaEnabled string
+	BrowserColorDepth        string
+	BrowserHeader            string
+	BrowserJavaEnabled       string
 	BrowserJavascriptEnabled string
-	BrowserLanguage string
-	BrowserScreenHeight string
-	BrowserScreenWidth string
-	BrowserTimeZone string
-	DeviceChannel string
-	DeviceReferenceId string
-	IpAddress string
-	UserAgent string
+	BrowserLanguage          string
+	BrowserScreenHeight      string
+	BrowserScreenWidth       string
+	BrowserTimeZone          string
+	DeviceChannel            string
+	DeviceReferenceId        string
+	IpAddress                string
+	UserAgent                string
 }
 
 func GenerateCmpiRequestBodyXml(params CmpiRequestBodyParams) (string, error) {
