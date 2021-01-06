@@ -1,6 +1,3 @@
-// Sample usage:
-// API_KEY=... go run main.go
-
 package main
 
 import (
@@ -10,12 +7,21 @@ import (
 )
 
 func main() {
+	apiId := os.Getenv("API_ID")
+	apiKey := os.Getenv("API_KEY")
+	orgUnit := os.Getenv("ORG_UNIT")
+
+	if apiId == "" || apiKey == "" || orgUnit == "" {
+		fmt.Println("Error: Please specify Cardinal API_ID, API_KEY, and ORG_UNIT in ENV")
+		os.Exit(1)
+	}
+
 	fmt.Println("Running cmpi_lookup request...")
 
 	timestamp := cmpilookup.GetRequestTimestampWithBuffer()
 	fmt.Printf("Generated request timestamp: %q\n", timestamp)
 
-	signature, err := cmpilookup.GenerateCmpiRequestSignature(os.Getenv("API_KEY"), timestamp)
+	signature, err := cmpilookup.GenerateCmpiRequestSignature(apiKey, timestamp)
 
 	if err != nil {
 		fmt.Printf("Error generating request signature: %v\n", err)
@@ -25,8 +31,8 @@ func main() {
 	fmt.Printf("Generated request signature: %q\n", signature)
 
 	params := cmpilookup.CmpiRequestBodyParams{
-		ApiId:            os.Getenv("API_ID"),
-		OrgUnit:          os.Getenv("ORG_UNIT"),
+		ApiId:            apiId,
+		OrgUnit:          orgUnit,
 		RequestSignature: signature,
 		RequestTimestamp: timestamp,
 
