@@ -52,7 +52,7 @@ type CmpiRequestBodyParams struct {
 	ApiId            string
 	OrgUnit          string
 	RequestSignature string
-	Timestamp        string
+	RequestTimestamp string
 
 	// Card details (provided by TabaPay based on AccountId)
 	CardNumber      string
@@ -79,6 +79,19 @@ type CmpiRequestBodyParams struct {
 	DeviceReferenceId        string
 	IpAddress                string
 	UserAgent                string
+
+	// Cardholder details (provided by Wealthsimple)
+	BillingAddressStreet1     string
+	BillingAddressStreet2     string
+	BillingAddressCity        string
+	BillingAddressPostalCode  string
+	BillingAddressState       string
+	BillingAddressCountryCode string
+	BillingFirstName          string
+	BillingMiddleName         string
+	BillingLastName           string
+	Email                     string
+	MobilePhone               string
 }
 
 func GenerateCmpiRequestBodyXml(params CmpiRequestBodyParams) (string, error) {

@@ -28,7 +28,7 @@ func main() {
 		ApiId:            os.Getenv("API_ID"),
 		OrgUnit:          os.Getenv("ORG_UNIT"),
 		RequestSignature: signature,
-		Timestamp:        timestamp,
+		RequestTimestamp: timestamp,
 
 		// Wealthsimple will provide TabaPay API endpoint with an AccountId, from
 		// which TabaPay can extract the below card details.
@@ -57,6 +57,19 @@ func main() {
 		DeviceReferenceId:        "c17dea31-9cf6-0c1b8f2d3c5",
 		IpAddress:                "67.17.219.20",
 		UserAgent:                "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0",
+
+		// Billing details (provided by Wealthsimple to TabaPay API endpoint)
+		BillingAddressStreet1:     "4 Jersey St",
+		BillingAddressStreet2:     "Unit 123",
+		BillingAddressCity:        "Boston",
+		BillingAddressPostalCode:  "02215",
+		BillingAddressState:       "MA",
+		BillingAddressCountryCode: "840",
+		BillingFirstName:          "Pedro",
+		BillingLastName:           "Martinez",
+		BillingMiddleName:         "Jaime",
+		Email:                     "cardinal.mobile.test@example.com",
+		MobilePhone:               "+16175551234",
 	}
 	requestBody, err := cmpilookup.GenerateCmpiRequestBodyXml(params)
 

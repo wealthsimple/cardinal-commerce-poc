@@ -1,15 +1,15 @@
 <CardinalMPI>
     <Algorithm>SHA-256</Algorithm>
     <Amount>12345</Amount>
-    <BillingAddress1>8100 Tyler Blvd</BillingAddress1>
-    <BillingAddress2></BillingAddress2>
-    <BillingCity>Mentor</BillingCity>
+    <BillingAddress1>4 Jersey St</BillingAddress1>
+    <BillingAddress2>Unit 123</BillingAddress2>
+    <BillingCity>Boston</BillingCity>
     <BillingCountryCode>840</BillingCountryCode>
-    <BillingFirstName>John</BillingFirstName>
-    <BillingFullName>John Doe</BillingFullName>
-    <BillingLastName>Doe</BillingLastName>
-    <BillingPostalCode>44060</BillingPostalCode>
-    <BillingState>OH</BillingState>
+    <BillingFirstName>Pedro</BillingFirstName>
+    <BillingMiddleName>Jaime</BillingMiddleName>
+    <BillingLastName>Martinez</BillingLastName>
+    <BillingPostalCode>02215</BillingPostalCode>
+    <BillingState>MA</BillingState>
     <BrowserColorDepth>32</BrowserColorDepth>
     <BrowserHeader>text/html,application/xhtml+xml,application/xml;q=0.9,</BrowserHeader>
     <BrowserJavaEnabled>true</BrowserJavaEnabled>
@@ -27,6 +27,7 @@
     <Email>cardinal.mobile.test@example.com</Email>
     <IPAddress>67.17.219.20</IPAddress>
     <Identifier>api-id-123</Identifier>
+    <MobilePhone>+16175551234</MobilePhone>
     <MsgType>cmpi_lookup</MsgType>
     <OrderNumber>ws_transaction-0001</OrderNumber>
     <OrgUnit>org-unit-123</OrgUnit>

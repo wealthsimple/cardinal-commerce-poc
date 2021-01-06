@@ -1,15 +1,15 @@
 <CardinalMPI>
     <Algorithm>SHA-256</Algorithm>
     <Amount>{{.OrderAmount}}</Amount>
-    <BillingAddress1>8100 Tyler Blvd</BillingAddress1>
-    <BillingAddress2></BillingAddress2>
-    <BillingCity>Mentor</BillingCity>
-    <BillingCountryCode>840</BillingCountryCode>
-    <BillingFirstName>John</BillingFirstName>
-    <BillingFullName>John Doe</BillingFullName>
-    <BillingLastName>Doe</BillingLastName>
-    <BillingPostalCode>44060</BillingPostalCode>
-    <BillingState>OH</BillingState>
+    <BillingAddress1>{{.BillingAddressStreet1}}</BillingAddress1>
+    <BillingAddress2>{{.BillingAddressStreet2}}</BillingAddress2>
+    <BillingCity>{{.BillingAddressCity}}</BillingCity>
+    <BillingCountryCode>{{.BillingAddressCountryCode}}</BillingCountryCode>
+    <BillingFirstName>{{.BillingFirstName}}</BillingFirstName>
+    <BillingMiddleName>{{.BillingMiddleName}}</BillingMiddleName>
+    <BillingLastName>{{.BillingLastName}}</BillingLastName>
+    <BillingPostalCode>{{.BillingAddressPostalCode}}</BillingPostalCode>
+    <BillingState>{{.BillingAddressState}}</BillingState>
     <BrowserColorDepth>{{.BrowserColorDepth}}</BrowserColorDepth>
     <BrowserHeader>{{.BrowserHeader}}</BrowserHeader>
     <BrowserJavaEnabled>{{.BrowserJavaEnabled}}</BrowserJavaEnabled>
@@ -24,14 +24,15 @@
     <CurrencyCode>{{.OrderCurrencyCode}}</CurrencyCode>
     <DFReferenceId>{{.DeviceReferenceId}}</DFReferenceId>
     <DeviceChannel>{{.DeviceChannel}}</DeviceChannel>
-    <Email>cardinal.mobile.test@example.com</Email>
+    <Email>{{.Email}}</Email>
     <IPAddress>{{.IpAddress}}</IPAddress>
     <Identifier>{{.ApiId}}</Identifier>
+    <MobilePhone>{{.MobilePhone}}</MobilePhone>
     <MsgType>cmpi_lookup</MsgType>
     <OrderNumber>{{.OrderNumber}}</OrderNumber>
     <OrgUnit>{{.OrgUnit}}</OrgUnit>
     <Signature>{{.RequestSignature}}</Signature>
-    <Timestamp>{{.Timestamp}}</Timestamp>
+    <Timestamp>{{.RequestTimestamp}}</Timestamp>
     <TransactionMode>{{.OrderTransactionMode}}</TransactionMode>
     <TransactionType>{{.OrderTransactionType}}</TransactionType>
     <UserAgent>{{.UserAgent}}</UserAgent>
