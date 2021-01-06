@@ -28,6 +28,7 @@ order_number = "ws_transaction-0001"
 order_amount = "12345" # Amount is in cents
 order_currency_code = "840" # 3-digit ISO country code
 order_transaction_type = "C" # C = credit/debit
+order_transaction_mode = "P" # P = mobile device, S = computer, etc
 billing_address = {
   street1: "4 Jersey St",
   street2: "Unit 123",
@@ -92,6 +93,7 @@ cmpi_lookup = <<-XML
     <OrgUnit>#{org_unit}</OrgUnit>
     <Signature>#{request_signature}</Signature>
     <Timestamp>#{timestamp}</Timestamp>
+    <TransactionMode>#{order_transaction_mode}</TransactionMode>
     <TransactionType>#{order_transaction_type}</TransactionType>
     <UserAgent>#{browser_details[:user_agent]}</UserAgent>
     <Version>1.7</Version>
