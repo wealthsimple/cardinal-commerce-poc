@@ -37,6 +37,7 @@ func main() {
 		CardExpiryYear:  "2024",
 	}
 	requestBody, err := cmpilookup.GenerateCmpiRequestBodyXml(params)
+
 	if err != nil {
 		fmt.Printf("Error generating request body XML: %v\n", err)
 		os.Exit(1)
@@ -46,10 +47,15 @@ func main() {
 	fmt.Println(requestBody)
 
 	response, err := cmpilookup.PerformCmpiLookupRequest(requestBody)
+
 	if err != nil {
 		fmt.Printf("Error performing request: %v\n", err)
 		os.Exit(1)
 	}
+
 	fmt.Println("Received response:")
 	fmt.Println(response)
+
+	// Response should look something like this:
+	// <CardinalMPI><ErrorNo>0</ErrorNo><TransactionId>...</TransactionId><...</Payload><StepUpUrl>https://centinelapistag.cardinalcommerce.com/V2/Cruise/StepUp</StepUpUrl><ErrorDesc></ErrorDesc><Cavv></Cavv><PAResStatus>C</PAResStatus><Enrolled>Y</Enrolled><ACSTransactionId>...</ACSTransactionId><EciFlag>07</EciFlag><ACSUrl>...</ACSUrl><ThreeDSServerTransactionId>...</ThreeDSServerTransactionId><CardBin>400000</CardBin><CardBrand>VISA</CardBrand><DSTransactionId>...</DSTransactionId><ThreeDSVersion>2.1.0</ThreeDSVersion><OrderId>...</OrderId><ChallengeRequired>N</ChallengeRequired><SignatureVerification>Y</SignatureVerification></CardinalMPI>
 }
