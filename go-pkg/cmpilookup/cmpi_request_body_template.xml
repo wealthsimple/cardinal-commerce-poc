@@ -1,6 +1,7 @@
 <CardinalMPI>
     <Algorithm>SHA-256</Algorithm>
     <Amount>{{.OrderAmount}}</Amount>
+    <AuthenticationIndicator>{{.OrderAuthenticationIndicator}}</AuthenticationIndicator>
     <BillingAddress1>{{.BillingAddressStreet1}}</BillingAddress1>
     <BillingAddress2>{{.BillingAddressStreet2}}</BillingAddress2>
     <BillingCity>{{.BillingAddressCity}}</BillingCity>
@@ -31,6 +32,7 @@
     <MsgType>cmpi_lookup</MsgType>
     <OrderNumber>{{.OrderNumber}}</OrderNumber>
     <OrgUnit>{{.OrgUnit}}</OrgUnit>
+    <ProductCode>{{.OrderProductCode}}</ProductCode>
     <Signature>{{.RequestSignature}}</Signature>
     <Timestamp>{{.RequestTimestamp}}</Timestamp>
     <TransactionMode>{{.OrderTransactionMode}}</TransactionMode>

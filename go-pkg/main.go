@@ -38,11 +38,13 @@ func main() {
 		CardExpiryYear:  "2024",
 
 		// Order detals (provided by Wealthsimple to TabaPay API endpoint)
-		OrderAmount:          "12345", // Amount is in cents
-		OrderCurrencyCode:    "840",   // 3-digit ISO country code
-		OrderNumber:          "ws_transaction-0001",
-		OrderTransactionMode: "P",
-		OrderTransactionType: "C", // C: credit/debit
+		OrderAmount:                  "12345", // Amount is in cents
+		OrderAuthenticationIndicator: "01",    // 01 = Payment
+		OrderCurrencyCode:            "840",   // 3-digit ISO country code
+		OrderNumber:                  "ws_transaction-0001",
+		OrderProductCode:             "ACF",
+		OrderTransactionMode:         "P",
+		OrderTransactionType:         "C", // C: credit/debit
 
 		// Device details (provided by Wealthsimple to TabaPay API endpoint)
 		BrowserColorDepth:        "32",

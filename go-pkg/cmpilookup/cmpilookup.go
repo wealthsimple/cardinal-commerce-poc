@@ -46,7 +46,8 @@ func GetRequestTimestampWithBuffer() string {
 	return strconv.FormatInt(timestampInMilliseconds-timestampBuffer, 10)
 }
 
-// TODO: add all remaining params here:
+// Further documentation for request body params can be found at:
+// https://cardinaldocs.atlassian.net/wiki/spaces/CCen/pages/905478187/Lookup+Request+cmpi+lookup
 type CmpiRequestBodyParams struct {
 	// Cardinal API request metadata (provided by TabaPay)
 	ApiId            string
@@ -56,15 +57,17 @@ type CmpiRequestBodyParams struct {
 
 	// Card details (provided by TabaPay based on AccountId)
 	CardNumber      string
-	CardExpiryMonth string
-	CardExpiryYear  string
+	CardExpiryMonth string `MM format (example: "01" = January)`
+	CardExpiryYear  string `YYYY format`
 
 	// Order details (provided by Wealthsimple)
-	OrderAmount          string
-	OrderCurrencyCode    string
-	OrderNumber          string
-	OrderTransactionMode string
-	OrderTransactionType string
+	OrderAmount                  string `order amount in cents (12345 = $123.45)`
+	OrderAuthenticationIndicator string `type of Authentication request (01 = Payment)`
+	OrderCurrencyCode            string `3-digit ISO 3166-1 country code`
+	OrderNumber                  string `unique id for order`
+	OrderProductCode             string `PHY = physcial goods, ACF = account funding, ..`
+	OrderTransactionMode         string `P = mobile, S = computer, T = tablet`
+	OrderTransactionType         string `C = credit/debit`
 
 	// Device details (provided by Wealthsimple)
 	BrowserColorDepth        string
@@ -85,13 +88,13 @@ type CmpiRequestBodyParams struct {
 	BillingAddressStreet2     string
 	BillingAddressCity        string
 	BillingAddressPostalCode  string
-	BillingAddressState       string
+	BillingAddressState       string `Country subdivision code in ISO 3166-2 format`
 	BillingAddressCountryCode string
 	BillingFirstName          string
 	BillingMiddleName         string
 	BillingLastName           string
 	Email                     string
-	MobilePhone               string
+	MobilePhone               string `Phone unformatted without hyphens`
 }
 
 func GenerateCmpiRequestBodyXml(params CmpiRequestBodyParams) (string, error) {

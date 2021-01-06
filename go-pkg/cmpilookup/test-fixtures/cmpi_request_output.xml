@@ -1,6 +1,7 @@
 <CardinalMPI>
     <Algorithm>SHA-256</Algorithm>
     <Amount>12345</Amount>
+    <AuthenticationIndicator>01</AuthenticationIndicator>
     <BillingAddress1>4 Jersey St</BillingAddress1>
     <BillingAddress2>Unit 123</BillingAddress2>
     <BillingCity>Boston</BillingCity>
@@ -31,6 +32,7 @@
     <MsgType>cmpi_lookup</MsgType>
     <OrderNumber>ws_transaction-0001</OrderNumber>
     <OrgUnit>org-unit-123</OrgUnit>
+    <ProductCode>ACF</ProductCode>
     <Signature>X5TupwjjpO9hg5qIHG2h9aMCekWiqbYkzPkXkPopFMw=</Signature>
     <Timestamp>1485534293321</Timestamp>
     <TransactionMode>P</TransactionMode>
