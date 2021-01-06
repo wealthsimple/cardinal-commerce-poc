@@ -6,7 +6,9 @@ import (
 	"encoding/base64"
 	"errors"
 	"io"
+	"strconv"
 	"text/template"
+	"time"
 )
 
 // Given a Cardinal apiKey and unix timestamp, return a request signature for
@@ -26,6 +28,15 @@ func GenerateCmpiRequestSignature(apiKey string, timestamp string) (string, erro
 	signature := base64.StdEncoding.EncodeToString(hash.Sum(nil))
 
 	return signature, nil
+}
+
+// Returns the unix epoch timestamp in milliseconds (with small buffer)
+// Jason Chow from Cardinal recommended the small buffer since otherwise the
+// cmpi_lookup request will sporadically fail.
+func GetRequestTimestampWithBuffer() (string) {
+	timestampBuffer := int64(10000)
+	timestampInMilliseconds := time.Now().UnixNano() / int64(time.Millisecond)
+	return strconv.FormatInt(timestampInMilliseconds - timestampBuffer, 10)
 }
 
 // TODO: add all remaining params here:

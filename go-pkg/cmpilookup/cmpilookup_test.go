@@ -34,6 +34,13 @@ func TestGenerateCmpiRequestSignatureWithInvalidTimestamp(t *testing.T) {
 	}
 }
 
+func TestGetRequestTimestampWithBuffer(t *testing.T) {
+	timestamp := GetRequestTimestampWithBuffer()
+	if len(timestamp) != 13 {
+		t.Fatal("Expected unix epoch timestamp in milliseconds (13 digits)")
+	}
+}
+
 func TestGenerateCmpiRequestBodyXmlWithValidParams(t *testing.T) {
 	params := CmpiRequestBodyParams{
 		ApiId:            "api-id-123",
