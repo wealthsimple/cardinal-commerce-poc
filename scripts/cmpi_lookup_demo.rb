@@ -41,12 +41,14 @@ billing_person = {
   last: "Martinez",
   middle: "",
   email: "cardinal.mobile.test@example.com",
+  mobile_phone: "617-555-1234",
 }
 browser_details = {
   accept_header: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
   color_depth: '32',
   ip_address: '67.17.219.20',
   java_enabled: 'true',
+  javascript_enabled: 'true',
   language: 'en-CA',
   screen_height: '980',
   screen_width: '1080',
@@ -70,6 +72,7 @@ cmpi_lookup = <<-XML
     <BrowserColorDepth>#{browser_details[:color_depth]}</BrowserColorDepth>
     <BrowserHeader>#{browser_details[:accept_header]}</BrowserHeader>
     <BrowserJavaEnabled>#{browser_details[:java_enabled]}</BrowserJavaEnabled>
+    <BrowserJavascriptEnabled>#{browser_details[:javascript_enabled]}</BrowserJavascriptEnabled>
     <BrowserLanguage>#{browser_details[:language]}</BrowserLanguage>
     <BrowserScreenHeight>#{browser_details[:screen_height]}</BrowserScreenHeight>
     <BrowserScreenWidth>#{browser_details[:screen_width]}</BrowserScreenWidth>
@@ -83,6 +86,7 @@ cmpi_lookup = <<-XML
     <Email>#{billing_person[:email]}</Email>
     <IPAddress>#{browser_details[:ip_address]}</IPAddress>
     <Identifier>#{api_identifier}</Identifier>
+    <MobilePhone>#{billing_person[:mobile_phone]}</MobilePhone>
     <MsgType>cmpi_lookup</MsgType>
     <OrderNumber>#{order_number}</OrderNumber>
     <OrgUnit>#{org_unit}</OrgUnit>
