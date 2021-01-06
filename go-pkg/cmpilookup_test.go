@@ -40,6 +40,9 @@ func TestGenerateCmpiRequestBodyXmlWithValidParams(t *testing.T) {
 		OrgUnit:          "org-unit-123",
 		RequestSignature: "X5TupwjjpO9hg5qIHG2h9aMCekWiqbYkzPkXkPopFMw=",
 		Timestamp:        "1485534293321",
+		CardNumber:       "4000000000001091",
+		CardExpiryMonth:  "02",
+		CardExpiryYear:   "2024",
 	}
 	requestBody, err := GenerateCmpiRequestBodyXml(params)
 	expectedRequestBody, _ := ioutil.ReadFile("test-fixtures/cmpi_request_output.xml")

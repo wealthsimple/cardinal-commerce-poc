@@ -30,10 +30,15 @@ func GenerateCmpiRequestSignature(apiKey string, timestamp string) (string, erro
 
 // TODO: add all remaining params here:
 type CmpiRequestBodyParams struct {
+	// API request metadata
 	ApiId            string
 	OrgUnit          string
 	RequestSignature string
 	Timestamp        string
+	// Card details
+	CardNumber      string
+	CardExpiryMonth string
+	CardExpiryYear  string
 }
 
 func GenerateCmpiRequestBodyXml(params CmpiRequestBodyParams) (string, error) {

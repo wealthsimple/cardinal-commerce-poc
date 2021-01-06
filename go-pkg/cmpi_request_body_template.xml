@@ -19,9 +19,9 @@
     <BrowserScreenHeight>980</BrowserScreenHeight>
     <BrowserScreenWidth>1080</BrowserScreenWidth>
     <BrowserTimeZone>200</BrowserTimeZone>
-    <CardExpMonth>02</CardExpMonth>
-    <CardExpYear>2024</CardExpYear>
-    <CardNumber>4000000000001091</CardNumber>
+    <CardExpMonth>{{.CardExpiryMonth}}</CardExpMonth>
+    <CardExpYear>{{.CardExpiryYear}}</CardExpYear>
+    <CardNumber>{{.CardNumber}}</CardNumber>
     <CurrencyCode>840</CurrencyCode>
     <DFReferenceId>c17dea31-9cf6-0c1b8f2d3c5</DFReferenceId>
     <DeviceChannel>browser</DeviceChannel>
@@ -31,12 +31,6 @@
     <MsgType>cmpi_lookup</MsgType>
     <OrderNumber>order-0001</OrderNumber>
     <OrgUnit>{{.OrgUnit}}</OrgUnit>
-    <ShippingAddress1>8100 Tyler Blvd</ShippingAddress1>
-    <ShippingAddress2></ShippingAddress2>
-    <ShippingCity>44060</ShippingCity>
-    <ShippingCountryCode>840</ShippingCountryCode>
-    <ShippingPostalCode>44060</ShippingPostalCode>
-    <ShippingState>OH</ShippingState>
     <Signature>{{.RequestSignature}}</Signature>
     <Timestamp>{{.Timestamp}}</Timestamp>
     <TransactionType>C</TransactionType>
