@@ -1,8 +1,6 @@
 <CardinalMPI>
     <Algorithm>SHA-256</Algorithm>
     <Amount>12345</Amount>
-    <BillAddrPostCode>44060</BillAddrPostCode>
-    <BillAddrState>OH</BillAddrState>
     <BillingAddress1>8100 Tyler Blvd</BillingAddress1>
     <BillingAddress2></BillingAddress2>
     <BillingCity>Mentor</BillingCity>
