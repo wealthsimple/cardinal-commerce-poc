@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -86,6 +87,10 @@ func PerformCmpiLookupRequest(cmpiRequestBodyXml string) (string, error) {
 		return "", err
 	}
 	trimmedBody := strings.TrimRight(string(body), "\t \n")
+
+	if strings.Contains(trimmedBody, "Error Processing Lookup Request Message") {
+		return "", errors.New(fmt.Sprintf("Unsuccessful response: %q", trimmedBody))
+	}
 
 	return trimmedBody, nil
 }
