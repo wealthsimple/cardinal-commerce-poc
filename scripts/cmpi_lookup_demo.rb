@@ -23,7 +23,7 @@ card_expiry_year = "2024"
 
 # Additional details that Wealthsimple will provide to new TabaPay API endpoint:
 df_reference_id = "c17dea31-9cf6-0c1b8f2d3c5"
-device_channel "browser"
+device_channel = "browser"
 order_number = "ws_transaction-0001"
 order_amount = "12345" # Amount is in cents
 order_currency_code = "840" # 3-digit ISO country code
