@@ -1,6 +1,7 @@
 package cmpilookup
 
 import (
+	"io/ioutil"
 	"testing"
 )
 
@@ -30,5 +31,19 @@ func TestGenerateCmpiRequestSignatureWithInvalidTimestamp(t *testing.T) {
 	_, err := GenerateCmpiRequestSignature(apiKey, timestamp)
 	if err == nil {
 		t.Fatal("GenerateCmpiRequestSignature should return error for invalid timestamp")
+	}
+}
+
+func TestGenerateCmpiRequestBodyXmlWithValidParams(t *testing.T) {
+	params := CmpiRequestBodyParams{
+		ApiId:            "api-id-123",
+		OrgUnit:          "org-unit-123",
+		RequestSignature: "X5TupwjjpO9hg5qIHG2h9aMCekWiqbYkzPkXkPopFMw=",
+		Timestamp:        "1485534293321",
+	}
+	requestBody, err := GenerateCmpiRequestBodyXml(params)
+	expectedRequestBody, _ := ioutil.ReadFile("test-fixtures/cmpi_request_output.xml")
+	if requestBody != string(expectedRequestBody) || err != nil {
+		t.Fatalf(`GenerateCmpiRequestBodyXml => %q, %v, want match for %q, nil`, requestBody, err, expectedRequestBody)
 	}
 }
