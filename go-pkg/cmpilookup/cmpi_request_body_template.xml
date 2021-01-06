@@ -10,21 +10,22 @@
     <BillingLastName>Doe</BillingLastName>
     <BillingPostalCode>44060</BillingPostalCode>
     <BillingState>OH</BillingState>
-    <BrowserColorDepth>32</BrowserColorDepth>
-    <BrowserHeader>text/html,application/xhtml+xml,application/xml;q=0.9,</BrowserHeader>
-    <BrowserJavaEnabled>true</BrowserJavaEnabled>
-    <BrowserLanguage>English</BrowserLanguage>
-    <BrowserScreenHeight>980</BrowserScreenHeight>
-    <BrowserScreenWidth>1080</BrowserScreenWidth>
-    <BrowserTimeZone>200</BrowserTimeZone>
+    <BrowserColorDepth>{{.BrowserColorDepth}}</BrowserColorDepth>
+    <BrowserHeader>{{.BrowserHeader}}</BrowserHeader>
+    <BrowserJavaEnabled>{{.BrowserJavaEnabled}}</BrowserJavaEnabled>
+    <BrowserJavascriptEnabled>{{.BrowserJavascriptEnabled}}</BrowserJavascriptEnabled>
+    <BrowserLanguage>{{.BrowserLanguage}}</BrowserLanguage>
+    <BrowserScreenHeight>{{.BrowserScreenHeight}}</BrowserScreenHeight>
+    <BrowserScreenWidth>{{.BrowserScreenWidth}}</BrowserScreenWidth>
+    <BrowserTimeZone>{{.BrowserTimeZone}}</BrowserTimeZone>
     <CardExpMonth>{{.CardExpiryMonth}}</CardExpMonth>
     <CardExpYear>{{.CardExpiryYear}}</CardExpYear>
     <CardNumber>{{.CardNumber}}</CardNumber>
     <CurrencyCode>{{.OrderCurrencyCode}}</CurrencyCode>
-    <DFReferenceId>c17dea31-9cf6-0c1b8f2d3c5</DFReferenceId>
-    <DeviceChannel>browser</DeviceChannel>
+    <DFReferenceId>{{.DeviceReferenceId}}</DFReferenceId>
+    <DeviceChannel>{{.DeviceChannel}}</DeviceChannel>
     <Email>cardinal.mobile.test@example.com</Email>
-    <IPAddress>67.17.219.20</IPAddress>
+    <IPAddress>{{.IpAddress}}</IPAddress>
     <Identifier>{{.ApiId}}</Identifier>
     <MsgType>cmpi_lookup</MsgType>
     <OrderNumber>{{.OrderNumber}}</OrderNumber>
@@ -33,6 +34,6 @@
     <Timestamp>{{.Timestamp}}</Timestamp>
     <TransactionMode>{{.OrderTransactionMode}}</TransactionMode>
     <TransactionType>{{.OrderTransactionType}}</TransactionType>
-    <UserAgent>Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0</UserAgent>
+    <UserAgent>{{.UserAgent}}</UserAgent>
     <Version>1.7</Version>
 </CardinalMPI>

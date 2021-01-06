@@ -13,7 +13,8 @@
     <BrowserColorDepth>32</BrowserColorDepth>
     <BrowserHeader>text/html,application/xhtml+xml,application/xml;q=0.9,</BrowserHeader>
     <BrowserJavaEnabled>true</BrowserJavaEnabled>
-    <BrowserLanguage>English</BrowserLanguage>
+    <BrowserJavascriptEnabled>true</BrowserJavascriptEnabled>
+    <BrowserLanguage>en-CA</BrowserLanguage>
     <BrowserScreenHeight>980</BrowserScreenHeight>
     <BrowserScreenWidth>1080</BrowserScreenWidth>
     <BrowserTimeZone>200</BrowserTimeZone>
