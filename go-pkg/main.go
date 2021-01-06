@@ -29,12 +29,20 @@ func main() {
 		OrgUnit:          os.Getenv("ORG_UNIT"),
 		RequestSignature: signature,
 		Timestamp:        timestamp,
+
 		// Wealthsimple will provide TabaPay an AccountId, from which TabaPay can
 		// extract the below card details.
 		// Cardinal Sandbox card PANs can be found at https://cardinaldocs.atlassian.net/wiki/spaces/CCen/pages/903577725/EMV+3DS+Test+Cases
 		CardNumber:      "4000000000001091",
 		CardExpiryMonth: "02",
 		CardExpiryYear:  "2024",
+
+		// Wealthsimple will provide below params in API request to TabaPay:
+		OrderAmount: "12345", // Amount is in cents
+		OrderCurrencyCode: "840",// 3-digit ISO country code
+		OrderNumber: "ws_transaction-0001",
+		OrderTransactionMode: "P",
+		OrderTransactionType: "C", // C: credit/debit
 	}
 	requestBody, err := cmpilookup.GenerateCmpiRequestBodyXml(params)
 

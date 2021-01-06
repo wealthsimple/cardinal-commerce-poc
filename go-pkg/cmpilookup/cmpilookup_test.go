@@ -50,6 +50,11 @@ func TestGenerateCmpiRequestBodyXmlWithValidParams(t *testing.T) {
 		CardNumber:       "4000000000001091",
 		CardExpiryMonth:  "02",
 		CardExpiryYear:   "2024",
+		OrderAmount: "12345",
+		OrderCurrencyCode: "840",
+		OrderNumber: "ws_transaction-0001",
+		OrderTransactionMode: "P",
+		OrderTransactionType: "C",
 	}
 	requestBody, err := GenerateCmpiRequestBodyXml(params)
 	expectedRequestBody, _ := ioutil.ReadFile("test-fixtures/cmpi_request_output.xml")

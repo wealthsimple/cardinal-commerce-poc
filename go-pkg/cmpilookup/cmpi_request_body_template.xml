@@ -1,6 +1,6 @@
 <CardinalMPI>
     <Algorithm>SHA-256</Algorithm>
-    <Amount>12345</Amount>
+    <Amount>{{.OrderAmount}}</Amount>
     <BillingAddress1>8100 Tyler Blvd</BillingAddress1>
     <BillingAddress2></BillingAddress2>
     <BillingCity>Mentor</BillingCity>
@@ -20,18 +20,19 @@
     <CardExpMonth>{{.CardExpiryMonth}}</CardExpMonth>
     <CardExpYear>{{.CardExpiryYear}}</CardExpYear>
     <CardNumber>{{.CardNumber}}</CardNumber>
-    <CurrencyCode>840</CurrencyCode>
+    <CurrencyCode>{{.OrderCurrencyCode}}</CurrencyCode>
     <DFReferenceId>c17dea31-9cf6-0c1b8f2d3c5</DFReferenceId>
     <DeviceChannel>browser</DeviceChannel>
     <Email>cardinal.mobile.test@example.com</Email>
     <IPAddress>67.17.219.20</IPAddress>
     <Identifier>{{.ApiId}}</Identifier>
     <MsgType>cmpi_lookup</MsgType>
-    <OrderNumber>order-0001</OrderNumber>
+    <OrderNumber>{{.OrderNumber}}</OrderNumber>
     <OrgUnit>{{.OrgUnit}}</OrgUnit>
     <Signature>{{.RequestSignature}}</Signature>
     <Timestamp>{{.Timestamp}}</Timestamp>
-    <TransactionType>C</TransactionType>
+    <TransactionMode>{{.OrderTransactionMode}}</TransactionMode>
+    <TransactionType>{{.OrderTransactionType}}</TransactionType>
     <UserAgent>Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0</UserAgent>
     <Version>1.7</Version>
 </CardinalMPI>

@@ -48,19 +48,27 @@ func GetRequestTimestampWithBuffer() string {
 
 // TODO: add all remaining params here:
 type CmpiRequestBodyParams struct {
-	// API request metadata
+	// Cardinal API request metadata (provided by TabaPay)
 	ApiId            string
 	OrgUnit          string
 	RequestSignature string
 	Timestamp        string
-	// Card details
+
+	// Card details (provided by TabaPay based on AccountId)
 	CardNumber      string
 	CardExpiryMonth string
 	CardExpiryYear  string
+
+	// Order details (provided by Wealthsimple)
+	OrderAmount string
+	OrderCurrencyCode string
+	OrderNumber string
+	OrderTransactionMode string
+	OrderTransactionType string
 }
 
 func GenerateCmpiRequestBodyXml(params CmpiRequestBodyParams) (string, error) {
-	// Open up the XML template file
+	// Open up the XML template file via relative path:
 	_, file, _, _ := runtime.Caller(0)
 	relativePath := path.Join(path.Dir(file))
 	xmlTemplate := template.Must(template.ParseFiles(relativePath + "/cmpi_request_body_template.xml"))
