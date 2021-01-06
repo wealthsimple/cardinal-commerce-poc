@@ -21,8 +21,7 @@ func main() {
 	timestamp := cmpilookup.GetRequestTimestampWithBuffer()
 	fmt.Printf("Generated request timestamp: %q\n", timestamp)
 
-	signature, err := cmpilookup.GenerateCmpiRequestSignature(apiKey, timestamp)
-
+	signature, err := cmpilookup.GenerateRequestSignature(apiKey, timestamp)
 	if err != nil {
 		fmt.Printf("Error generating request signature: %v\n", err)
 		os.Exit(1)
@@ -30,7 +29,7 @@ func main() {
 
 	fmt.Printf("Generated request signature: %q\n", signature)
 
-	params := cmpilookup.CmpiRequestBodyParams{
+	params := cmpilookup.RequestBodyParams{
 		ApiId:            apiId,
 		OrgUnit:          orgUnit,
 		RequestSignature: signature,
@@ -79,7 +78,7 @@ func main() {
 		Email:                     "cardinal.mobile.test@example.com",
 		MobilePhone:               "+16175551234",
 	}
-	requestBody, err := cmpilookup.GenerateCmpiRequestBodyXml(params)
+	requestBody, err := cmpilookup.GenerateRequestBodyXml(params)
 
 	if err != nil {
 		fmt.Printf("Error generating request body XML: %v\n", err)

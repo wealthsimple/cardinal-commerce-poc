@@ -21,7 +21,7 @@ import (
 // Given a Cardinal apiKey and unix timestamp, return a request signature for
 // the cmpi_lookup request. Cardinal docs on generating this signature:
 // https://cardinaldocs.atlassian.net/wiki/spaces/CCen/pages/1619492942/Cardinal+cmpi+Messages#Generating-a-Signature-Value
-func GenerateCmpiRequestSignature(apiKey string, timestamp string) (string, error) {
+func GenerateRequestSignature(apiKey string, timestamp string) (string, error) {
 	if apiKey == "" || timestamp == "" {
 		return "", errors.New("Must provide apiKey and timestamp")
 	}
@@ -48,7 +48,7 @@ func GetRequestTimestampWithBuffer() string {
 
 // Further documentation for request body params can be found at:
 // https://cardinaldocs.atlassian.net/wiki/spaces/CCen/pages/905478187/Lookup+Request+cmpi+lookup
-type CmpiRequestBodyParams struct {
+type RequestBodyParams struct {
 	// Cardinal API request metadata (provided by TabaPay)
 	ApiId            string
 	OrgUnit          string
@@ -97,7 +97,7 @@ type CmpiRequestBodyParams struct {
 	MobilePhone               string `Phone unformatted without hyphens`
 }
 
-func GenerateCmpiRequestBodyXml(params CmpiRequestBodyParams) (string, error) {
+func GenerateRequestBodyXml(params RequestBodyParams) (string, error) {
 	// Open up the XML template file via relative path:
 	_, file, _, _ := runtime.Caller(0)
 	relativePath := path.Join(path.Dir(file))

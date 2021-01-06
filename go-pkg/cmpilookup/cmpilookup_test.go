@@ -5,32 +5,32 @@ import (
 	"testing"
 )
 
-func TestGenerateCmpiRequestSignatureWithValidInputs(t *testing.T) {
+func TestGenerateRequestSignatureWithValidInputs(t *testing.T) {
 	// Sample values from https://cardinaldocs.atlassian.net/wiki/spaces/CCen/pages/1619492942/Cardinal+cmpi+Messages#Generating-a-Signature-Value
 	apiKey := "13f1fd1b-ab2d-4c1f-8e2c-ca61878f2a44"
 	timestamp := "1485534293321"
-	signature, err := GenerateCmpiRequestSignature(apiKey, timestamp)
+	signature, err := GenerateRequestSignature(apiKey, timestamp)
 	expectedSignature := "X5TupwjjpO9hg5qIHG2h9aMCekWiqbYkzPkXkPopFMw="
 	if signature != expectedSignature || err != nil {
-		t.Fatalf(`GenerateCmpiRequestSignature => %q, %v, want match for %q, nil`, signature, err, expectedSignature)
+		t.Fatalf(`GenerateRequestSignature => %q, %v, want match for %q, nil`, signature, err, expectedSignature)
 	}
 }
 
-func TestGenerateCmpiRequestSignatureWithInvalidApiKey(t *testing.T) {
+func TestGenerateRequestSignatureWithInvalidApiKey(t *testing.T) {
 	apiKey := ""
 	timestamp := "1485534293321"
-	_, err := GenerateCmpiRequestSignature(apiKey, timestamp)
+	_, err := GenerateRequestSignature(apiKey, timestamp)
 	if err == nil {
-		t.Fatal("GenerateCmpiRequestSignature should return error for empty apiKey")
+		t.Fatal("GenerateRequestSignature should return error for empty apiKey")
 	}
 }
 
-func TestGenerateCmpiRequestSignatureWithInvalidTimestamp(t *testing.T) {
+func TestGenerateRequestSignatureWithInvalidTimestamp(t *testing.T) {
 	apiKey := "13f1fd1b-ab2d-4c1f-8e2c-ca61878f2a44"
 	timestamp := "1609890356"
-	_, err := GenerateCmpiRequestSignature(apiKey, timestamp)
+	_, err := GenerateRequestSignature(apiKey, timestamp)
 	if err == nil {
-		t.Fatal("GenerateCmpiRequestSignature should return error for invalid timestamp")
+		t.Fatal("GenerateRequestSignature should return error for invalid timestamp")
 	}
 }
 
@@ -41,8 +41,8 @@ func TestGetRequestTimestampWithBuffer(t *testing.T) {
 	}
 }
 
-func TestGenerateCmpiRequestBodyXmlWithValidParams(t *testing.T) {
-	params := CmpiRequestBodyParams{
+func TestGenerateRequestBodyXmlWithValidParams(t *testing.T) {
+	params := RequestBodyParams{
 		ApiId:                        "api-id-123",
 		OrgUnit:                      "org-unit-123",
 		RequestSignature:             "X5TupwjjpO9hg5qIHG2h9aMCekWiqbYkzPkXkPopFMw=",
@@ -81,9 +81,9 @@ func TestGenerateCmpiRequestBodyXmlWithValidParams(t *testing.T) {
 		Email:                        "cardinal.mobile.test@example.com",
 		MobilePhone:                  "+16175551234",
 	}
-	requestBody, err := GenerateCmpiRequestBodyXml(params)
+	requestBody, err := GenerateRequestBodyXml(params)
 	expectedRequestBody, _ := ioutil.ReadFile("test-fixtures/cmpi_request_output.xml")
 	if requestBody != string(expectedRequestBody) || err != nil {
-		t.Fatalf(`GenerateCmpiRequestBodyXml => %q, %v, want match for %q, nil`, requestBody, err, expectedRequestBody)
+		t.Fatalf(`GenerateRequestBodyXml => %q, %v, want match for %q, nil`, requestBody, err, expectedRequestBody)
 	}
 }
