@@ -99,6 +99,8 @@ type RequestBodyParams struct {
 	WorkPhone                 string `Optional work phone number`
 }
 
+// IMPORTANT: Consider using something like https://golang.org/pkg/encoding/xml/
+// instead since since `text/template` package will not escape params:
 func GenerateRequestBodyXml(params RequestBodyParams) (string, error) {
 	// Open up the XML template file via relative path:
 	_, file, _, _ := runtime.Caller(0)
