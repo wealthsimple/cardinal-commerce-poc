@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -110,25 +109,22 @@ func GenerateRequestBodyXml(params RequestBodyParams) (string, error) {
 	return requestBodyBuffer.String(), nil
 }
 
-func PerformCmpiLookupRequest(cmpiRequestBodyXml string) (string, error) {
+func PerformCmpiLookupRequest(cmpiRequestBodyXml string) (string, map[string][]string, error) {
 	response, err := http.PostForm(
 		"https://centineltest.cardinalcommerce.com/maps/txns.asp",
 		url.Values{"cmpi_msg": {cmpiRequestBodyXml}},
 	)
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
 
 	defer response.Body.Close()
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return "", err
+		return "", nil, err
 	}
+
+	// Remove excess whitespace at end of response:
 	trimmedBody := strings.TrimRight(string(body), "\t \n")
-
-	if strings.Contains(trimmedBody, "Error Processing Lookup Request Message") {
-		return "", errors.New(fmt.Sprintf("Unsuccessful response: %q", trimmedBody))
-	}
-
-	return trimmedBody, nil
+	return trimmedBody, response.Header, nil
 }
