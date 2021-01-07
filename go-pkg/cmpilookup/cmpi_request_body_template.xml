@@ -4,11 +4,13 @@
     <AuthenticationIndicator>{{.OrderAuthenticationIndicator}}</AuthenticationIndicator>
     <BillingAddress1>{{.BillingAddressStreet1}}</BillingAddress1>
     <BillingAddress2>{{.BillingAddressStreet2}}</BillingAddress2>
+    <BillingAddress3>{{.BillingAddressStreet3}}</BillingAddress3>
     <BillingCity>{{.BillingAddressCity}}</BillingCity>
     <BillingCountryCode>{{.BillingAddressCountryCode}}</BillingCountryCode>
     <BillingFirstName>{{.BillingFirstName}}</BillingFirstName>
     <BillingMiddleName>{{.BillingMiddleName}}</BillingMiddleName>
     <BillingLastName>{{.BillingLastName}}</BillingLastName>
+    <BillingPhone>{{.BillingPhone}}</BillingPhone>
     <BillingPostalCode>{{.BillingAddressPostalCode}}</BillingPostalCode>
     <BillingState>{{.BillingAddressState}}</BillingState>
     <BrowserColorDepth>{{.BrowserColorDepth}}</BrowserColorDepth>
@@ -39,4 +41,5 @@
     <TransactionType>{{.OrderTransactionType}}</TransactionType>
     <UserAgent>{{.UserAgent}}</UserAgent>
     <Version>1.7</Version>
+    <WorkPhone>{{.WorkPhone}}</WorkPhone>
 </CardinalMPI>

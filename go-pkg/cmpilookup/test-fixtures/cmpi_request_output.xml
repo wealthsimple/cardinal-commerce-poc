@@ -4,11 +4,13 @@
     <AuthenticationIndicator>01</AuthenticationIndicator>
     <BillingAddress1>4 Jersey St</BillingAddress1>
     <BillingAddress2>Unit 123</BillingAddress2>
+    <BillingAddress3></BillingAddress3>
     <BillingCity>Boston</BillingCity>
     <BillingCountryCode>840</BillingCountryCode>
     <BillingFirstName>Pedro</BillingFirstName>
     <BillingMiddleName>Jaime</BillingMiddleName>
     <BillingLastName>Martinez</BillingLastName>
+    <BillingPhone></BillingPhone>
     <BillingPostalCode>02215</BillingPostalCode>
     <BillingState>MA</BillingState>
     <BrowserColorDepth>32</BrowserColorDepth>
@@ -39,4 +41,5 @@
     <TransactionType>C</TransactionType>
     <UserAgent>Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0</UserAgent>
     <Version>1.7</Version>
+    <WorkPhone></WorkPhone>
 </CardinalMPI>

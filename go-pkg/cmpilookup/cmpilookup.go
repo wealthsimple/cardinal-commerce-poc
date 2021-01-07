@@ -85,15 +85,18 @@ type RequestBodyParams struct {
 	// Cardholder details (provided by Wealthsimple)
 	BillingAddressStreet1     string
 	BillingAddressStreet2     string
+	BillingAddressStreet3     string
 	BillingAddressCity        string
 	BillingAddressPostalCode  string
 	BillingAddressState       string `Country subdivision code in ISO 3166-2 format`
-	BillingAddressCountryCode string
+	BillingAddressCountryCode string `3-digit ISO 3166-1 country code`
 	BillingFirstName          string
 	BillingMiddleName         string
 	BillingLastName           string
+	BillingPhone              string `Optional billing phone number`
 	Email                     string
-	MobilePhone               string `Phone unformatted without hyphens`
+	MobilePhone               string `Mobile phone unformatted without hyphens`
+	WorkPhone                 string `Optional work phone number`
 }
 
 func GenerateRequestBodyXml(params RequestBodyParams) (string, error) {
