@@ -12,8 +12,12 @@ CARD_NUMBERS = {
   MASTERCARD_FAIL: '5200000000001013',
 }
 
-# https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/360668/Cardinal+Cruise+Hybrid
 get '/' do
+  erb :index
+end
+
+# https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/360668/Cardinal+Cruise+Hybrid
+get '/3ds_metadata' do
   order_number = "wsorder_#{SecureRandom.uuid}"
   order_amount = 12345
   order_currency_code = "840"
@@ -25,13 +29,14 @@ get '/' do
     callback_url: "http://localhost:4567/3ds-callback-todo",
   )
 
-  erb :index, locals: {
+  content_type :json
+  JSON.dump({
     cardinal_jwt: cardinal_jwt.generate_transactional_jwt,
     card_bin: CARD_NUMBERS.fetch(:VISA_CHALLENGE).first(6),
     order_number: order_number,
     order_amount: order_amount,
     order_currency_code: order_currency_code,
-  }
+  })
 end
 
 # This new API endpoint will be implemented by TabaPay

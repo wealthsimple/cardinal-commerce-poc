@@ -13,9 +13,8 @@
   <body>
     <h1>Wealthsimple Cardinal 3DS Songbird Demo</h1>
     <pre>Open up JS console to view verbose logs.</pre>
-    <h4>Cardinal Transactional JWT <textarea><%= locals[:cardinal_jwt] %></textarea></h4>
-    <h4>Order Number <pre><%= locals[:order_number] %></pre></h4>
-    <h4>Order Amount <pre>$<%= (locals[:order_amount].to_d / 100).round(2) %> (Currency Code: <%= locals[:order_currency_code] %>)</pre></h4>
+    <h4>Order Number <pre id="order-number">loading...</pre></h4>
+    <h4>Order Amount (in cents) <pre><span id="order-amount">loading...</span> (Currency Code: <span id="order-currency-code">loading...</span>)</pre></h4>
     <h4>DfReferenceId <pre id='df-reference-id'>loading...</pre></h4>
     <h4>3DS Result</h4>
     <pre id="threeds-result">Awaiting results...</pre>
@@ -28,11 +27,23 @@
 
     <script>
       // Values that Wealthsimple will generate or have access to:
-      const orderNumber = "<%= locals[:order_number] %>";
-      const orderAmount = "<%= locals[:order_amount] %>";
-      const orderCurrencyCode = "<%= locals[:order_currency_code] %>";
-      const cardBin = "<%= locals[:card_bin] %>";
-      const cardinalJwt = "<%= locals[:cardinal_jwt] %>";
+      let threeDSMetadata;
+
+      fetch('/3ds_metadata')
+        .then(res => res.json())
+        .then((data) => {
+          console.log('Fetched 3DS metadata:', data);
+          threeDSMetadata = data;
+
+          document.querySelector('#order-number').innerText = threeDSMetadata.order_number;
+          document.querySelector('#order-amount').innerText = threeDSMetadata.order_amount;
+          document.querySelector('#order-currency-code').innerText = threeDSMetadata.order_currency_code;
+
+          Cardinal.setup('init', {
+            'jwt': threeDSMetadata.cardinal_jwt,
+          });
+        })
+        .catch(e => console.log("error fetching 3ds metadata:", e));
 
       Cardinal.on('payments.setupComplete', function(setupCompleteData) {
         console.log('Cardinal payments.setupComplete', { setupCompleteData });
@@ -50,10 +61,10 @@
             },
             body: JSON.stringify({
               df_reference_id: dfReferenceId,
-              order_number: orderNumber,
+              order_number: threeDSMetadata.order_number,
               // In actual implementation, these would be sent by our backend to TabaPay:
-              order_amount: orderAmount,
-              order_currency_code: orderCurrencyCode,
+              order_amount: threeDSMetadata.order_amount,
+              order_currency_code: threeDSMetadata.order_currency_code,
             })
           })
             .then(res => res.json())
@@ -67,9 +78,9 @@
                 // https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/32950/Request+Objects#RequestObjects-OrderObject
                 {
                   OrderDetails: {
-                    OrderNumber: orderNumber,
-                    Amount: orderAmount,
-                    CurrencyCode: orderCurrencyCode,
+                    OrderNumber: threeDSMetadata.order_number,
+                    Amount: threeDSMetadata.order_amount,
+                    CurrencyCode: threeDSMetadata.order_currency_code,
                     OrderChannel: 'P',
                     TransactionId: data.CardinalMPI.TransactionId,
                   },
@@ -80,7 +91,7 @@
         });
 
         console.log('Processing BIN...')
-        Cardinal.trigger("bin.process", cardBin)
+        Cardinal.trigger("bin.process", threeDSMetadata.card_bin)
           .then(function(results){
             console.log('bin.process results:', results);
             if(results.Status) {
@@ -177,10 +188,6 @@
         payment:{
           framework: 'inline'
         }
-      });
-
-      Cardinal.setup('init', {
-        'jwt': cardinalJwt,
       });
     </script>
   </body>
