@@ -53,11 +53,13 @@ type RequestBodyParams struct {
 	OrgUnit          string
 	RequestSignature string
 	RequestTimestamp string
+	ThreeDSVersion   string `Optionally specifies a specific 3DS version to use`
 
 	// Card details (provided by TabaPay based on AccountId)
 	CardNumber      string
 	CardExpiryMonth string `MM format (example: "01" = January)`
 	CardExpiryYear  string `YYYY format`
+	CardType        string `Optional card type, required for certain networks (example: "UPI" = UnionPay International)`
 
 	// Order details (provided by Wealthsimple)
 	OrderAmount                  string `order amount in cents (12345 = $123.45)`

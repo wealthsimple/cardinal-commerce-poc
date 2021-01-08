@@ -24,6 +24,7 @@
     <CardExpMonth>{{.CardExpiryMonth}}</CardExpMonth>
     <CardExpYear>{{.CardExpiryYear}}</CardExpYear>
     <CardNumber>{{.CardNumber}}</CardNumber>
+    <CardType>{{.CardType}}</CardType>
     <CurrencyCode>{{.OrderCurrencyCode}}</CurrencyCode>
     <DFReferenceId>{{.DeviceReferenceId}}</DFReferenceId>
     <DeviceChannel>{{.DeviceChannel}}</DeviceChannel>
@@ -36,6 +37,7 @@
     <OrgUnit>{{.OrgUnit}}</OrgUnit>
     <ProductCode>{{.OrderProductCode}}</ProductCode>
     <Signature>{{.RequestSignature}}</Signature>
+    <ThreeDSVersion>{{.ThreeDSVersion}}</ThreeDSVersion>
     <Timestamp>{{.RequestTimestamp}}</Timestamp>
     <TransactionMode>{{.OrderTransactionMode}}</TransactionMode>
     <TransactionType>{{.OrderTransactionType}}</TransactionType>

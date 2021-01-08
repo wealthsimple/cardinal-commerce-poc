@@ -24,6 +24,7 @@
     <CardExpMonth>02</CardExpMonth>
     <CardExpYear>2024</CardExpYear>
     <CardNumber>4000000000001091</CardNumber>
+    <CardType></CardType>
     <CurrencyCode>840</CurrencyCode>
     <DFReferenceId>c17dea31-9cf6-0c1b8f2d3c5</DFReferenceId>
     <DeviceChannel>browser</DeviceChannel>
@@ -36,6 +37,7 @@
     <OrgUnit>org-unit-123</OrgUnit>
     <ProductCode>ACF</ProductCode>
     <Signature>X5TupwjjpO9hg5qIHG2h9aMCekWiqbYkzPkXkPopFMw=</Signature>
+    <ThreeDSVersion></ThreeDSVersion>
     <Timestamp>1485534293321</Timestamp>
     <TransactionMode>P</TransactionMode>
     <TransactionType>C</TransactionType>
