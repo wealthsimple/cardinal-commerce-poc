@@ -16,9 +16,11 @@ get '/' do
   erb :index
 end
 
+# This endpoint returns the initial metadata needed to initialize the
+# Cardinal frontend library.
 # https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/360668/Cardinal+Cruise+Hybrid
-get '/3ds_metadata' do
-  order_number = "wsorder_#{SecureRandom.uuid}"
+get '/cardinal_init_metadata' do
+  order_number = "wsorder#{SecureRandom.uuid}"
   order_amount = 12345
   order_currency_code = "840"
 
@@ -32,16 +34,38 @@ get '/3ds_metadata' do
   content_type :json
   JSON.dump({
     cardinal_jwt: cardinal_jwt.generate_transactional_jwt,
-    card_bin: CARD_NUMBERS.fetch(:VISA_CHALLENGE).first(6),
     order_number: order_number,
     order_amount: order_amount,
     order_currency_code: order_currency_code,
   })
 end
 
-# This new API endpoint will be implemented by TabaPay
+# This new API endpoint will be implemented by TabaPay.
+# This will return a DeviceDataCollectionUrl which is used to collect device
+# metadata ahead of starting the 3DS flow.
+# https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/1109065750/Option+2+-+BIN+Intelligence+API+plus+JWT
+post `/accounts/:account_id/orders/:order_number/proxy_bin_intelligence` do |account_id, order_number|
+  # Given the accountID, TabaPay will be able to get the card details.
+  # The below card number is hard-coded for this demo purposes:
+  card_number = CARD_NUMBERS.fetch(:VISA_CHALLENGE)
+  bin_intelligence = BinIntelligence.new(
+    card_number: card_number,
+    order_number: order_number,
+  )
+  response = bin_intelligence.perform_request
+  puts "BIN Intelligence Response:", response
+
+  content_type :json
+  response
+end
+
+# This new API endpoint will be implemented by TabaPay.
+# This is used to perform a "CMPI lookup". The response will contain an ACSUrl
+# and Payload field. You can use these fields to determine if you need to
+# present the 3DS authentication session to the consumer.
 post '/accounts/:account_id/proxy_cmpi_lookup' do |account_id|
-  # Given the accountID, TabaPay will be able to get the card details:
+  # Given the accountID, TabaPay will be able to get the card details.
+  # The below card number is hard-coded for this demo purposes:
   card_number = CARD_NUMBERS.fetch(:VISA_CHALLENGE)
   card_expiry_month = "02"
   card_expiry_year = "2024"
