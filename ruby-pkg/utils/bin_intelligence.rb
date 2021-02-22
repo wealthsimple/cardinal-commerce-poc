@@ -1,5 +1,7 @@
 # https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/1107394642/PART+1+-+API+-+Card+BIN+to+Card+Number+in+API+to+BIN+Intelligence+API
 class BinIntelligence
+  SIGNATURE_ALGORITHM = "SHA-256".freeze
+
   def initialize(
     card_number:,
     order_number:
@@ -11,13 +13,22 @@ class BinIntelligence
     # Via Cardinal contact (Jason Chow), add a small buffer to timestamp or else
     # this request sporadically fails:
     timestamp_buffer = 1.second
-    @timestamp = (Time.now - timestamp_buffer).to_i
+    @timestamp = (Time.now.utc - timestamp_buffer)
   end
 
-  def perform_request
+  def v2_perform_request
     RestClient.post(
-      ENV.fetch('BIN_INTELLIGENCE_URL'),
+      ENV.fetch('BIN_INTELLIGENCE_V2_URL'),
       v2_request_body.to_json,
+      { content_type: :json, accept: :json },
+    )
+  end
+
+  def v3_perform_request
+    pp "Request body:", v3_request_body
+    RestClient.post(
+      ENV.fetch('BIN_INTELLIGENCE_V3_URL'),
+      v3_request_body.to_json,
       { content_type: :json, accept: :json },
     )
   end
@@ -25,16 +36,16 @@ class BinIntelligence
   def request_signature
     api_key = ENV.fetch('API_KEY')
     Base64.strict_encode64(
-      Digest::SHA256.digest("#{@timestamp}#{api_key}")
+      Digest::SHA256.digest("#{(@timestamp.to_f * 1000).to_i}#{@order_number}#{api_key}")
     ).strip
   end
 
   def v2_request_body
     # {
     #   Signature: request_signature,
-    #   Timestamp: @timestamp,
+    #   Timestamp: @timestamp.iso8601,
     #   Identifier: ENV.fetch('API_IDENTIFIER'),
-    #   Algorithm: "SHA-256",
+    #   Algorithm: SIGNATURE_ALGORITHM,
     #   # Alpha numeric value transactionId. Length 5-55 characters long
     #   TransactionId: @order_number,
     #   OrgUnitId: ENV.fetch('ORG_UNIT_ID'),
@@ -51,6 +62,41 @@ class BinIntelligence
       "OrgUnitId": "565607c18b111e058463ds8r",
       "Payload": {
         "BINs": "44444444"
+      }
+    }
+  end
+
+  def v3_request_body
+    # {
+    #   "Signature": "2ejC+DdvSVyRD2PnskTGw4G7rg0CqwfZNAqniChWjp0=",
+    #   "Timestamp": "2018-09-19T19:04:05.104Z",
+    #   "SessionId": "",
+    #   "TransactionId": "132456789",
+    #   "Identifier": "aalkjdfalkdjfaslkdj",
+    #   "OrgUnitId": "564cdcbcb9f63f0c48d6387f",
+    #   "Algorithm": "SHA-256",
+    #   "Payload": {
+    #     "BINs": [
+    #       {
+    #         "AccountNumber": "123456",
+    #       }
+    #     ]
+    #   }
+    # }
+    {
+      "Signature": request_signature,
+      "Timestamp": @timestamp.iso8601(3),
+      "SessionId": "",
+      "TransactionId": @order_number,
+      "Identifier": ENV.fetch('API_IDENTIFIER'),
+      "OrgUnitId": ENV.fetch('ORG_UNIT_ID'),
+      "Algorithm": SIGNATURE_ALGORITHM,
+      "Payload": {
+        "BINs": [
+          {
+            "AccountNumber": @card_number,
+          }
+        ]
       }
     }
   end
