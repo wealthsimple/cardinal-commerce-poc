@@ -52,7 +52,7 @@ post `/accounts/:account_id/orders/:order_number/proxy_bin_intelligence` do |acc
     card_number: card_number,
     order_number: order_number,
   )
-  response = bin_intelligence.perform_request
+  response = bin_intelligence.v3_perform_request
   puts "BIN Intelligence Response:", response
 
   content_type :json
