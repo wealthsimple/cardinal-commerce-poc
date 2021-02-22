@@ -16,7 +16,9 @@ class BinIntelligence
     @timestamp = (Time.now.utc - timestamp_buffer)
   end
 
+  # DOES NOT WORK ON STAGING. Deprecated?
   def v2_perform_request
+    pp "Request body:", v2_request_body
     RestClient.post(
       ENV.fetch('BIN_INTELLIGENCE_V2_URL'),
       v2_request_body.to_json,
@@ -40,29 +42,30 @@ class BinIntelligence
     ).strip
   end
 
+  # DOES NOT WORK ON STAGING. Deprecated?
   def v2_request_body
     # {
-    #   Signature: request_signature,
-    #   Timestamp: @timestamp.iso8601,
-    #   Identifier: ENV.fetch('API_IDENTIFIER'),
-    #   Algorithm: SIGNATURE_ALGORITHM,
-    #   # Alpha numeric value transactionId. Length 5-55 characters long
-    #   TransactionId: @order_number,
-    #   OrgUnitId: ENV.fetch('ORG_UNIT_ID'),
-    #   Payload: {
-    #     BINs: @card_number,
-    #   },
+    #   "Signature": "rDblGQSJujgHEeuvqTbJjB6Fktsodddiri6+F5do9cA=",
+    #   "Timestamp": "2018-08-12T14:23:02.941Z",
+    #   "Identifier": "aalkjdfalkdjfaslkdj",
+    #   "Algorithm": "SHA-256",
+    #   "TransactionId": "132456789",
+    #   "OrgUnitId": "565607c18b111e058463ds8r",
+    #   "Payload": {
+    #     "BINs": "44444444"
+    #   }
     # }
     {
-      "Signature": "rDblGQSJujgHEeuvqTbJjB6Fktsodddiri6+F5do9cA=",
-      "Timestamp": "2018-08-12T14:23:02.941Z",
-      "Identifier": "aalkjdfalkdjfaslkdj",
-      "Algorithm": "SHA-256",
-      "TransactionId": "132456789",
-      "OrgUnitId": "565607c18b111e058463ds8r",
-      "Payload": {
-        "BINs": "44444444"
-      }
+      Signature: request_signature,
+      Timestamp: @timestamp.iso8601(3),
+      Identifier: ENV.fetch('API_IDENTIFIER'),
+      Algorithm: SIGNATURE_ALGORITHM,
+      # Alpha numeric value transactionId. Length 5-55 characters long
+      TransactionId: @order_number,
+      OrgUnitId: ENV.fetch('ORG_UNIT_ID'),
+      Payload: {
+        BINs: @card_number,
+      },
     }
   end
 
