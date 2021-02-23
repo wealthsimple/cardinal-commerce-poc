@@ -23,8 +23,10 @@ get '/cardinal_init_metadata' do
   order_number = "wsorder#{SecureRandom.uuid}"
   order_amount = 12345
   order_currency_code = "840"
+  jti = SecureRandom.uuid
 
-  cardinal_jwt = CardinalJwt.new(
+  cardinal_jwt = CardinalJwt.new.generate_transactional_jwt(
+    jti: jti,
     order_number: order_number,
     order_amount: order_amount,
     order_currency_code: order_currency_code,
@@ -33,7 +35,8 @@ get '/cardinal_init_metadata' do
 
   content_type :json
   JSON.dump({
-    cardinal_jwt: cardinal_jwt.generate_transactional_jwt,
+    cardinal_jwt: cardinal_jwt,
+    jti: jti,
     order_number: order_number,
     order_amount: order_amount,
     order_currency_code: order_currency_code,
@@ -57,10 +60,20 @@ post '/accounts/:account_id/proxy_bin_intelligence' do |account_id|
     order_number: request_params[:order_number],
   )
   response = bin_intelligence.v3_perform_request
-  puts "BIN Intelligence Response:", response
+  response_json = JSON.parse(response).deep_symbolize_keys
+  puts "BIN Intelligence Response:", response_json
+
+  authentication_jwt = CardinalJwt.new.generate_authentication_jwt(
+    jti: request_params[:jti],
+    reference_id: response_json[:Payload][:ReferenceId],
+    return_url: "http://localhost:4567/3ds-callback-todo",
+  )
 
   content_type :json
-  response
+  JSON.dump({
+    authentication_jwt: authentication_jwt,
+    device_data_collection_url: response_json[:Payload][:DeviceDataCollectionUrl],
+  })
 end
 
 # This new API endpoint will be implemented by TabaPay.

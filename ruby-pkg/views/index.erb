@@ -97,6 +97,7 @@
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+              jti: threeDSMetadata.jti,
               order_number: threeDSMetadata.order_number,
             })
           })
