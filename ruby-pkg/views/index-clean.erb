@@ -83,8 +83,18 @@
         })
           .then(res => res.json())
           .then(data => {
-            // TODO: handle scenario of VISA_SUCCESS/ VISA_FAIL
-            console.log('Submit transaction success. Continuing CCA flow...', data);
+              console.log('Submit transaction response:', data);
+            if (!data.CardinalMPI.ACSUrl) {
+              if (data.CardinalMPI.PAResStatus === 'Y') {
+                console.log('Frictionless auth. No additional steps required!');
+                // TODO: save details here to FortKnox and show success UI
+                return;
+              } else {
+                console.log('An error occurred. Exit flow here and show error UI.', { PAResStatus: data.CardinalMPI.PAResStatus });
+                return;
+              }
+            }
+            console.log('Continuing CCA flow...', data);
             Cardinal.continue('cca',
               {
                 AcsUrl: data.CardinalMPI.ACSUrl,
