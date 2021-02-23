@@ -30,7 +30,7 @@ get '/cardinal_init_metadata' do
     order_number: order_number,
     order_amount: order_amount,
     order_currency_code: order_currency_code,
-    callback_url: "http://localhost:4567/3ds-callback-todo",
+    callback_url: "https://www.wealthsimple.com",
   )
 
   content_type :json
@@ -70,7 +70,7 @@ post '/accounts/:account_id/proxy_bin_intelligence' do |account_id|
   authentication_jwt = CardinalJwt.new.generate_authentication_jwt(
     jti: request_params[:jti],
     reference_id: response_json[:Payload][:ReferenceId],
-    return_url: "http://localhost:4567/3ds-callback-todo",
+    return_url: "https://www.wealthsimple.com",
   )
 
   content_type :json
