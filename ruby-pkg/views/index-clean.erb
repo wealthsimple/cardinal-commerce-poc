@@ -14,7 +14,6 @@
     <!-- This iframe allows for device data collection after BIN Intelligence API response is received: -->
     <iframe id="device-data-collection-iframe" height="10" width="10" style="visibility: hidden; position: absolute; top: -1000px; left: -1000px;"></iframe>
 
-    <div id="Cardinal-Payments"></div>
     <div id="my-visible-wrapper">
       <h1>Loading spinner...</h1>
     </div>
@@ -184,9 +183,6 @@
         timeout: 6000,
         extendedtimeout: 4000,
         maxRequestRetries: 2,
-        button:{
-          containerId: 'Cardinal-Payments'
-        },
         payment:{
           framework: 'inline'
         }
