@@ -16,6 +16,10 @@ get '/' do
   erb :index
 end
 
+get '/clean' do
+  erb :'index-clean'
+end
+
 # This endpoint returns the initial metadata needed to initialize the
 # Cardinal frontend library.
 # https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/360668/Cardinal+Cruise+Hybrid
