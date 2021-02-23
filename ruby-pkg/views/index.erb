@@ -90,27 +90,20 @@
             .catch(e => console.log('Submit transaction error:', e));
         });
 
-        console.log('TODO: we will need to initiate DeviceDataCollection here');
-        // TODO: implement this: https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/1106575397/PART+2+-+JWT+-+ReferenceId+passed+in+JWT
-
-        // Cardinal.trigger("bin.process", threeDSMetadata.card_bin)
-        //   .then(function(results){
-        //     console.log('bin.process results:', results);
-        //     if(results.Status) {
-        //         // Bin profiling was successful. Some merchants may want to only move forward with CCA if profiling was successful
-        //         console.log('bin.process succeeded!');
-        //     } else {
-        //         // Bin profiling failed
-        //         console.log('bin.process failed!');
-        //     }
-
-        //     // Bin profiling, if this is the card the end user is paying with you may start the CCA flow at this point
-        //     // Cardinal.start('cca', myOrderObject);
-        //   })
-        //   .catch(function(error){
-        //     // An error occurred during profiling
-        //     console.log('bin.process error:', error);
-        //   });
+        fetch('/accounts/TabaPayAccount123/proxy_bin_intelligence', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              order_number: threeDSMetadata.order_number,
+            })
+          })
+            .then(res => res.json())
+            .then(data => {
+              console.log('BIN Intelligence success:', data);
+            });
       });
 
       Cardinal.on('payments.validated', function(decodedResponseData, responseJWT){

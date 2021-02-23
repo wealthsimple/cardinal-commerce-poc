@@ -26,6 +26,15 @@ class BinIntelligence
     )
   end
 
+  # Response to this should look like the following:
+  # {
+  #   "TransactionId": "wsorder...",
+  #   "ErrorNumber": 0,
+  #   "Payload": {
+  #     "ReferenceId":"8331f435-fa52-4e2c-8860-1fde266cd98e",
+  #     "DeviceDataCollectionUrl":"https://centinelapistag.cardinalcommerce.com/V1/Cruise/Collect"
+  #   }
+  # }
   def v3_perform_request
     pp "Request body:", v3_request_body
     RestClient.post(

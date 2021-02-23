@@ -44,13 +44,17 @@ end
 # This will return a DeviceDataCollectionUrl which is used to collect device
 # metadata ahead of starting the 3DS flow.
 # https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/1109065750/Option+2+-+BIN+Intelligence+API+plus+JWT
-post `/accounts/:account_id/orders/:order_number/proxy_bin_intelligence` do |account_id, order_number|
+post '/accounts/:account_id/proxy_bin_intelligence' do |account_id|
   # Given the accountID, TabaPay will be able to get the card details.
   # The below card number is hard-coded for this demo purposes:
   card_number = CARD_NUMBERS.fetch(:VISA_CHALLENGE)
+
+  # Params that Wealthsimple will provide in request body:
+  request_params = JSON.parse(request.body.read).symbolize_keys
+
   bin_intelligence = BinIntelligence.new(
     card_number: card_number,
-    order_number: order_number,
+    order_number: request_params[:order_number],
   )
   response = bin_intelligence.v3_perform_request
   puts "BIN Intelligence Response:", response
