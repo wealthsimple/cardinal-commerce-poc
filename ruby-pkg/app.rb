@@ -43,6 +43,11 @@ get '/cardinal_init_metadata' do
   })
 end
 
+get '/device_data_collection' do
+  @authentication_jwt = params['authentication_jwt']
+  erb :'device-data-collection'
+end
+
 # This new API endpoint will be implemented by TabaPay.
 # This will return a DeviceDataCollectionUrl which is used to collect device
 # metadata ahead of starting the 3DS flow.
