@@ -25,7 +25,7 @@ get '/cardinal_init_metadata' do
   order_currency_code = "840"
   jti = SecureRandom.uuid
 
-  cardinal_jwt = CardinalJwt.new.generate_transactional_jwt(
+  transactional_jwt = CardinalJwt.new.generate_transactional_jwt(
     jti: jti,
     order_number: order_number,
     order_amount: order_amount,
@@ -35,7 +35,7 @@ get '/cardinal_init_metadata' do
 
   content_type :json
   JSON.dump({
-    cardinal_jwt: cardinal_jwt,
+    transactional_jwt: transactional_jwt,
     jti: jti,
     order_number: order_number,
     order_amount: order_amount,
