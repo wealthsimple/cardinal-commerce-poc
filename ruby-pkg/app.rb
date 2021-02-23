@@ -25,17 +25,8 @@ get '/cardinal_init_metadata' do
   order_currency_code = "840"
   jti = SecureRandom.uuid
 
-  transactional_jwt = CardinalJwt.new.generate_transactional_jwt(
-    jti: jti,
-    order_number: order_number,
-    order_amount: order_amount,
-    order_currency_code: order_currency_code,
-    callback_url: "https://www.wealthsimple.com",
-  )
-
   content_type :json
   JSON.dump({
-    transactional_jwt: transactional_jwt,
     jti: jti,
     order_number: order_number,
     order_amount: order_amount,
@@ -45,6 +36,10 @@ end
 
 get '/device_data_collection' do
   erb :'device-data-collection'
+end
+
+post '/iframe_callback' do
+  erb :'iframe-callback'
 end
 
 # This new API endpoint will be implemented by TabaPay.
@@ -70,7 +65,7 @@ post '/accounts/:account_id/proxy_bin_intelligence' do |account_id|
   authentication_jwt = CardinalJwt.new.generate_authentication_jwt(
     jti: request_params[:jti],
     reference_id: response_json[:Payload][:ReferenceId],
-    return_url: "https://www.wealthsimple.com",
+    return_url: "http://localhost:4567/iframe_callback",
   )
 
   content_type :json

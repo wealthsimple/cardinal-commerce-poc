@@ -42,9 +42,35 @@
           document.querySelector('#order-amount').innerText = threeDSMetadata.order_amount;
           document.querySelector('#order-currency-code').innerText = threeDSMetadata.order_currency_code;
 
-          Cardinal.setup('init', {
-            'jwt': threeDSMetadata.transactional_jwt,
-          });
+          fetch('/accounts/TabaPayAccount123/proxy_bin_intelligence', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              jti: threeDSMetadata.jti,
+              order_number: threeDSMetadata.order_number,
+            })
+          })
+            .then(res => res.json())
+            .then(binIntelligenceResponse => {
+              console.log('BIN Intelligence success:', binIntelligenceResponse);
+              // Use the BIN intelligence response to initiate device data collection:
+              // https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/1106575397/PART+2+-+JWT+-+ReferenceId+passed+in+JWT
+
+              window.addEventListener("message", (event) => {
+                // Note: this is quite noisy, with lots of potential events from various
+                // sources including browser extensions:
+                if (event.origin === 'http://localhost:4567' && event.data === 'completed_device_data_collection') {
+                  Cardinal.setup('init', {
+                    'jwt': binIntelligenceResponse.authentication_jwt,
+                  });
+                }
+              }, false);
+
+              document.querySelector('#device-data-collection-iframe').src = `http://localhost:4567/device_data_collection?authentication_jwt=${binIntelligenceResponse.authentication_jwt}`;
+            });
         })
         .catch(e => console.log("error fetching 3ds metadata:", e));
 
@@ -92,25 +118,6 @@
             })
             .catch(e => console.log('Submit transaction error:', e));
         });
-
-        fetch('/accounts/TabaPayAccount123/proxy_bin_intelligence', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              jti: threeDSMetadata.jti,
-              order_number: threeDSMetadata.order_number,
-            })
-          })
-            .then(res => res.json())
-            .then(binIntelligenceResponse => {
-              console.log('BIN Intelligence success:', binIntelligenceResponse);
-              // Use the BIN intelligence response to initiate device data collection:
-              // https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/1106575397/PART+2+-+JWT+-+ReferenceId+passed+in+JWT
-              document.querySelector('#device-data-collection-iframe').src = `http://localhost:4567/device_data_collection?authentication_jwt=${binIntelligenceResponse.authentication_jwt}`;
-            });
       });
 
       Cardinal.on('payments.validated', function(decodedResponseData, responseJWT){
