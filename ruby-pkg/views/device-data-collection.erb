@@ -1,15 +1,18 @@
-<%#
+<!--
 Documentation:
 https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/1106575397/PART+2+-+JWT+-+ReferenceId+passed+in+JWT
-%>
+-->
 <!DOCTYPE html>
 <html>
   <head></head>
   <form id="collectionForm" name="devicedata" method="POST" action="https://centinelapistag.cardinalcommerce.com/V2/Cruise/Collect">
     <!-- POST Parameters: is the JWT which is the Authentication JWT with the ReferenceId from the BIN Intelligence API Response -->
-    <input type="hidden" name="JWT" value="<%= @authentication_jwt %>" />
+    <input id="jwt-input" type="hidden" name="JWT" value="" />
   </form>
-  <script>window.onload = function () {
+  <script>
+    window.onload = function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      document.getElementById('jwt-input').value = urlParams.get('authentication_jwt');
       // Auto submit form on page load
       document.getElementById('collectionForm').submit();
     }

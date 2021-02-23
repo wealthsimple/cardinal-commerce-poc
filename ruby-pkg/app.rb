@@ -44,7 +44,6 @@ get '/cardinal_init_metadata' do
 end
 
 get '/device_data_collection' do
-  @authentication_jwt = params['authentication_jwt']
   erb :'device-data-collection'
 end
 
