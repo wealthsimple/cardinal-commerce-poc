@@ -16,32 +16,76 @@ get '/' do
   erb :index
 end
 
+get '/clean' do
+  erb :'index-clean'
+end
+
+# This endpoint returns the initial metadata needed to initialize the
+# Cardinal frontend library.
 # https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/360668/Cardinal+Cruise+Hybrid
-get '/3ds_metadata' do
-  order_number = "wsorder_#{SecureRandom.uuid}"
+get '/cardinal_init_metadata' do
+  order_number = "wsorder#{SecureRandom.uuid}"
   order_amount = 12345
   order_currency_code = "840"
-
-  cardinal_jwt = CardinalJwt.new(
-    order_number: order_number,
-    order_amount: order_amount,
-    order_currency_code: order_currency_code,
-    callback_url: "http://localhost:4567/3ds-callback-todo",
-  )
+  jti = SecureRandom.uuid
 
   content_type :json
   JSON.dump({
-    cardinal_jwt: cardinal_jwt.generate_transactional_jwt,
-    card_bin: CARD_NUMBERS.fetch(:VISA_CHALLENGE).first(6),
+    jti: jti,
     order_number: order_number,
     order_amount: order_amount,
     order_currency_code: order_currency_code,
   })
 end
 
-# This new API endpoint will be implemented by TabaPay
+get '/device_data_collection' do
+  erb :'device-data-collection'
+end
+
+post '/iframe_callback' do
+  erb :'iframe-callback'
+end
+
+# This new API endpoint will be implemented by TabaPay.
+# This will return a DeviceDataCollectionUrl which is used to collect device
+# metadata ahead of starting the 3DS flow.
+# https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/1109065750/Option+2+-+BIN+Intelligence+API+plus+JWT
+post '/accounts/:account_id/proxy_bin_intelligence' do |account_id|
+  # Given the accountID, TabaPay will be able to get the card details.
+  # The below card number is hard-coded for this demo purposes:
+  card_number = CARD_NUMBERS.fetch(:VISA_CHALLENGE)
+
+  # Params that Wealthsimple will provide in request body:
+  request_params = JSON.parse(request.body.read).symbolize_keys
+
+  bin_intelligence = BinIntelligence.new(
+    card_number: card_number,
+    order_number: request_params[:order_number],
+  )
+  response = bin_intelligence.v3_perform_request
+  response_json = JSON.parse(response).deep_symbolize_keys
+  puts "BIN Intelligence Response:", response_json
+
+  authentication_jwt = CardinalJwt.new.generate_authentication_jwt(
+    jti: request_params[:jti],
+    reference_id: response_json[:Payload][:ReferenceId],
+    return_url: "http://localhost:4567/iframe_callback",
+  )
+
+  content_type :json
+  JSON.dump({
+    authentication_jwt: authentication_jwt,
+    device_data_collection_url: response_json[:Payload][:DeviceDataCollectionUrl],
+  })
+end
+
+# This new API endpoint will be implemented by TabaPay.
+# This is used to perform a "CMPI lookup". The response will contain an ACSUrl
+# and Payload field. You can use these fields to determine if you need to
+# present the 3DS authentication session to the consumer.
 post '/accounts/:account_id/proxy_cmpi_lookup' do |account_id|
-  # Given the accountID, TabaPay will be able to get the card details:
+  # Given the accountID, TabaPay will be able to get the card details.
+  # The below card number is hard-coded for this demo purposes:
   card_number = CARD_NUMBERS.fetch(:VISA_CHALLENGE)
   card_expiry_month = "02"
   card_expiry_year = "2024"

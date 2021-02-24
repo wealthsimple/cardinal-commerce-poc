@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <script>
+    window.onload = function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      window.parent.postMessage('completed_device_data_collection');
+    }
+  </script>
+</html>

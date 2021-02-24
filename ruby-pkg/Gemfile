@@ -5,6 +5,7 @@ gem 'activesupport'
 gem 'curb'
 gem 'dotenv'
 gem 'jwt'
+gem 'rest-client'
 gem 'sinatra'
 
 group :development do

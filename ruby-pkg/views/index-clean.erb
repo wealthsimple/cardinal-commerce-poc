@@ -4,29 +4,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Wealthsimple Cardinal 3DS Hybrid Demo</title>
+    <title></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <script src="https://songbirdstag.cardinalcommerce.com/cardinalcruise/v1/songbird.js"></script> -->
+    <!-- TODO: use different url here for prod: -->
     <script src="https://songbirdstag.cardinalcommerce.com/edge/v1/songbird.js"></script>
   </head>
   <body>
-    <h1>Wealthsimple Cardinal 3DS Songbird Demo</h1>
-    <pre>Open up JS console to view verbose logs.</pre>
-    <h4>Order Number <pre id="order-number">loading...</pre></h4>
-    <h4>Order Amount (in cents) <pre><span id="order-amount">loading...</span> (Currency Code: <span id="order-currency-code">loading...</span>)</pre></h4>
-    <h4>DfReferenceId <pre id='df-reference-id'>loading...</pre></h4>
-    <h4>3DS Result</h4>
-    <pre id="threeds-result">Awaiting results...</pre>
-
-    <button id="submit-order-button">Submit Transaction</button>
-
-    <div id="Cardinal-Payments"></div>
-    <div id="my-visible-wrapper"></div>
-    <div id="my-hidden-wrapper"></div>
-
     <!-- This iframe allows for device data collection after BIN Intelligence API response is received: -->
     <iframe id="device-data-collection-iframe" height="10" width="10" style="visibility: hidden; position: absolute; top: -1000px; left: -1000px;"></iframe>
+
+    <div id="my-visible-wrapper">
+      <h1>Loading spinner...</h1>
+    </div>
+    <div id="my-hidden-wrapper"></div>
 
     <script>
       // Values that Wealthsimple will generate or have access to:
@@ -37,10 +28,6 @@
         .then((data) => {
           console.log('Fetched 3DS metadata:', data);
           threeDSMetadata = data;
-
-          document.querySelector('#order-number').innerText = threeDSMetadata.order_number;
-          document.querySelector('#order-amount').innerText = threeDSMetadata.order_amount;
-          document.querySelector('#order-currency-code').innerText = threeDSMetadata.order_currency_code;
 
           fetch('/accounts/TabaPayAccount123/proxy_bin_intelligence', {
             method: 'POST',
@@ -78,46 +65,53 @@
         console.log('Cardinal payments.setupComplete', { setupCompleteData });
 
         const dfReferenceId = setupCompleteData.sessionId;
-        document.querySelector('#df-reference-id').innerText = dfReferenceId;
-
-        document.querySelector('#submit-order-button').addEventListener('click', function() {
-          console.log('Submitting transaction...');
-          fetch('/accounts/TabaPayAccount123/proxy_cmpi_lookup', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              df_reference_id: dfReferenceId,
-              order_number: threeDSMetadata.order_number,
-              // In actual implementation, these would be sent by our backend to TabaPay:
-              order_amount: threeDSMetadata.order_amount,
-              order_currency_code: threeDSMetadata.order_currency_code,
-            })
+        console.log('Submitting transaction...');
+        fetch('/accounts/TabaPayAccount123/proxy_cmpi_lookup', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            df_reference_id: dfReferenceId,
+            order_number: threeDSMetadata.order_number,
+            // In actual implementation, these would be sent by our backend to TabaPay:
+            order_amount: threeDSMetadata.order_amount,
+            order_currency_code: threeDSMetadata.order_currency_code,
           })
-            .then(res => res.json())
-            .then(data => {
-              console.log('Submit transaction success. Continuing CCA flow...', data);
-              Cardinal.continue('cca',
-                {
-                  AcsUrl: data.CardinalMPI.ACSUrl,
-                  Payload: data.CardinalMPI.Payload
+        })
+          .then(res => res.json())
+          .then(data => {
+              console.log('Submit transaction response:', data);
+            if (!data.CardinalMPI.ACSUrl) {
+              if (data.CardinalMPI.PAResStatus === 'Y') {
+                console.log('Frictionless auth. No additional steps required!');
+                // TODO: save details here to FortKnox and show success UI
+                return;
+              } else {
+                console.log('An error occurred. Exit flow here and show error UI.', { PAResStatus: data.CardinalMPI.PAResStatus });
+                return;
+              }
+            }
+            console.log('Continuing CCA flow...', data);
+            Cardinal.continue('cca',
+              {
+                AcsUrl: data.CardinalMPI.ACSUrl,
+                Payload: data.CardinalMPI.Payload
+              },
+              // https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/32950/Request+Objects#RequestObjects-OrderObject
+              {
+                OrderDetails: {
+                  OrderNumber: threeDSMetadata.order_number,
+                  Amount: threeDSMetadata.order_amount,
+                  CurrencyCode: threeDSMetadata.order_currency_code,
+                  OrderChannel: 'P',
+                  TransactionId: data.CardinalMPI.TransactionId,
                 },
-                // https://cardinaldocs.atlassian.net/wiki/spaces/CC/pages/32950/Request+Objects#RequestObjects-OrderObject
-                {
-                  OrderDetails: {
-                    OrderNumber: threeDSMetadata.order_number,
-                    Amount: threeDSMetadata.order_amount,
-                    CurrencyCode: threeDSMetadata.order_currency_code,
-                    OrderChannel: 'P',
-                    TransactionId: data.CardinalMPI.TransactionId,
-                  },
-                },
-              );
-            })
-            .catch(e => console.log('Submit transaction error:', e));
-        });
+              },
+            );
+          })
+          .catch(e => console.log('Submit transaction error:', e));
       });
 
       Cardinal.on('payments.validated', function(decodedResponseData, responseJWT){
@@ -125,8 +119,6 @@
 
         switch (decodedResponseData.ActionCode) {
           case "SUCCESS":
-          // Handle successful transaction, send JWT to backend to verify
-          document.querySelector('#threeds-result').innerText = JSON.stringify(decodedResponseData, null, 2);
           break;
 
           case "NOACTION":
@@ -191,9 +183,6 @@
         timeout: 6000,
         extendedtimeout: 4000,
         maxRequestRetries: 2,
-        button:{
-          containerId: 'Cardinal-Payments'
-        },
         payment:{
           framework: 'inline'
         }
